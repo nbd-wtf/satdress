@@ -1,0 +1,35 @@
+<!doctype html>
+
+<style>
+label {
+  display: block;
+}
+</style>
+
+<form action="/grab" method="post">
+  <label>
+    desired username
+    <input name="name">
+  </label>
+
+  <label>
+    kind
+    <select name="kind">
+      <option>lnd</option>
+      <option>sparko</option>
+      <option>lnbits</option>
+    </select>
+  </label>
+
+  <label>
+    host
+    <input name="host">
+  </label>
+
+  <label>
+    key or macaroon
+    <input name="key">
+  </label>
+
+  <button>submit</button>
+</form>
