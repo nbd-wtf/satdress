@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/cockroachdb/pebble"
@@ -19,11 +20,13 @@ import (
 )
 
 type Settings struct {
-	Host      string `envconfig:"HOST" default:"0.0.0.0"`
-	Port      string `envconfig:"PORT" required:"true"`
-	Domain    string `envconfig:"DOMAIN" required:"true"`
-	Secret    string `envconfig:"SECRET" required:"true"`
-	SiteOwner string `envconfig:"SITE_OWNER" required:"true"`
+	Host          string `envconfig:"HOST" default:"0.0.0.0"`
+	Port          string `envconfig:"PORT" required:"true"`
+	Domain        string `envconfig:"DOMAIN" required:"true"`
+	Secret        string `envconfig:"SECRET" required:"true"`
+	SiteOwnerName string `envconfig:"SITE_OWNER_NAME" required:"true"`
+	SiteOwnerURL  string `envconfig:"SITE_OWNER_URL" required:"true"`
+	SiteName      string `envconfig:"SITE_NAME" required:"true"`
 }
 
 var s Settings
@@ -51,7 +54,25 @@ func main() {
 	router.Path("/").HandlerFunc(
 		func(w http.ResponseWriter, r *http.Request) {
 			w.Header().Set("content-type", "text/html")
-			fmt.Fprintf(w, html+"<p>offered by %s</p>", s.SiteOwner)
+			serverData, _ := json.Marshal(struct {
+				Domain        string `json:"domain"`
+				SiteOwnerName string `json:"siteOwnerName"`
+				SiteOwnerURL  string `json:"siteOwnerURL"`
+				SiteName      string `json:"siteName"`
+			}{
+				Domain:        s.Domain,
+				SiteOwnerName: s.SiteOwnerName,
+				SiteOwnerURL:  s.SiteOwnerURL,
+				SiteName:      s.SiteName,
+			})
+			fmt.Fprintf(w,
+				strings.ReplaceAll(
+					strings.ReplaceAll(
+						html, "{} // REPLACED WITH SERVER DATA", string(serverData),
+					),
+					"Satdress", s.SiteName,
+				),
+			)
 		},
 	)
 

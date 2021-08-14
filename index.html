@@ -1,113 +1,263 @@
-<!doctype html>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Satdress - Federated Lightning Address Server</title>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/png" href="https://i.imgur.com/4yaPtA2.png" />
+    <meta
+      property="og:title"
+      content="Satdress - Federated Lightning Address Server"
+    />
+    <meta
+      property="og:type"
+      content="website"
+    />
+    <meta
+      property="og:url"
+      content="https://github.com/fiatjaf/satdress"
+    />
+    <meta
+      property="og:description"
+      content="Satdress is a Federated Lightning Address server allowing you to connect Lightning nodes to Lightning Addresses. Satdress follows the Lightning Address protocol and aims to provide an easy-to-deploy Bridge Server."
+    />
+    <meta
+      property="og:image"
+      content="https://i.imgur.com/IYkJa8f.png"
+    />
+  </head>
+  <style>
+    body {
+      display: flex;
+      align-items: center;
+      background: #f3f3f3;
+      flex-direction: column;
+      font-family: 'PT Sans';
+      justify-content: center;
+      padding: 60px 20px 40px 20px;
+    }
 
-<style>
-main {
-  display: flex;
-  flex-wrap: wrap;
+    .title {
+      font-size: 40px;
+      text-align: center;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    .tagline {
+      opacity: 0.7;
+      font-size: 18px;
+      font-weight: 400;
+      text-align: center;
+      letter-spacing: 0.5px;
+    }
+
+    .description {
+      opacity: 0.7;
+      font-size: 18px;
+      font-weight: 400;
+      max-width: 320px;
+      text-align: center;
+      margin-bottom: 40px;
+      letter-spacing: 0.5px;
+    }
+
+    .card {
+      max-width: 400px;
+      background: #fff;
+      border-radius: 8px;
+      padding: 30px 40px;
+      margin: 20px 0 20px;
+      border: 1px solid #999;
+    }
+
+    .submit-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .submit {
+      width: 100%;
+      color: #fff;
+      outline: none;
+      font-size: 16px;
+      cursor: pointer;
+      font-weight: 600;
+      margin-top: 20px;
+      padding: 12px 8px;
+      border-radius: 8px;
+      letter-spacing: 0.5px;
+      border: 1px solid rgba(86, 46, 249, 0.85);
+      background-color: rgba(86, 46, 249, 0.75);
+    }
+
+    .submit:hover {
+      background-color: rgba(86, 46, 249, 0.85);
+    }
+
+    .label {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 5px;
+      letter-spacing: 0.5px;
+    }
+
+    .input {
+      height: 35px;
+      outline: none;
+      padding: 0 10px;
+      font-size: 14px;
+      border-radius: 5px;
+      margin-bottom: 25px;
+      letter-spacing: 0.5px;
+      border: 1px solid #999;
+      background-color: #f3f3f3;
+    }
+
+    .suffix {
+      height: 35px;
+      display: inline-flex;
+      padding: 0 10px;
+      font-size: 14px;
+      align-items: center;
+      border-radius: 5px;
+      margin-bottom: 25px;
+      letter-spacing: 0.5px;
+    }
+
+    select {
+      height: 35px;
+      outline: none;
+      padding: 0 5px;
+      font-size: 14px;
+      border-radius: 5px;
+      margin-bottom: 25px;
+      letter-spacing: 0.5px;
+      border: 1px solid #999;
+      background-color: #f3f3f3;
+    }
+
+    label {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .resources {
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .resource-button {
+      padding: 8px;
+      color: #8062fb;
+      font-weight: 400;
+      margin-bottom: 8px;
+      border-radius: 7px;
+      text-decoration: none;
+    }
+
+    .resource-button:hover {
+      color: #8062fb;
+      background: rgba(42,0,255,0.1);
+    }
+  </style>
+  <body>
+    <main id="main">
+      <div class="title">Satdress</div>
+      <div class="tagline">Federated Lightning Address Server</div>
+      <div class="card">
+        <div class="description">Use the form below to connect your own node to a <b>Lightning Address</b>.</div>
+        <form action="/grab" method="post">
+          <label>
+            <p class="label">
+              Desired Username
+            </p>
+            <div style="position: relative;">
+              <input class="input" name="name">
+              <span class="suffix" style="position: absolute;">@{{ domain }}</span>
+            </div>
+          </label>
+          <label>
+            <p class="label">
+              Type
+            </p>
+            <select name="kind" v-model="kind">
+              <option value="lnd">LND</option>
+              <option value="sparko">Sparko</option>
+              <option value="lnpay">LNPay</option>
+              <option value="lnbits">LNbits</option>
+            </select>
+          </label>
+          <div v-if="kind == 'lnd'">
+            <label>
+              <p class="label">
+                Host (IP or domain + Port)
+              </p>
+              <input class="input" name="host">
+            </label>
+            <label>
+              <p class="label">
+                Macaroon
+              </p>
+              <input class="input" name="key">
+            </label>
+          </div>
+          <div v-if="kind == 'sparko' || kind == 'lnbits'">
+            <label>
+              <p class="label">
+                Host (IP or domain + Port)
+              </p>
+              <input class="input" name="host">
+            </label>
+            <label>
+              <p class="label">
+                Key
+              </p>
+              <input class="input" name="key">
+            </label>
+          </div>
+          <div v-if="kind == 'lnpay'">
+            <label>
+              <p class="label">
+                Public Access Key (pak)
+              </p>
+              <input class="input" name="pak">
+            </label>
+            <label>
+              <p class="label">
+                Wallet Invoice Key (waki)
+              </p>
+              <input class="input" name="waki">
+            </label>
+          </div>
+          <button class="submit">Submit</button>
+        </form>
+      </div>
+      <div class="resources">
+        <a class="resource-button" href="https://github.com/andrerfneves/lightning-address#readme" target="_blank">
+          Lightning Address Documentation
+        </a>
+        <a class="resource-button" :href="siteOwnerURL" target="_blank">Brought to you by {{ siteOwnerName }}</a>
+        <a class="resource-button" target="_blank" href="https://github.com/fiatjaf/satdress">You can host this server on your domain</a>
+      </div>
+    </main>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.2.2/vue.global.prod.min.js"></script>
+    <script>
+const initial = {} // REPLACED WITH SERVER DATA // {siteOwnerName, siteOwnerURL, siteName, domain}
+
+const Main = {
+  data() {
+    return {
+      kind: 'lnd',
+      ...initial
+    }
+  }
 }
-form {
-  display: block;
-  padding: 20px;
-  margin: 20px;
-  border: dotted 2px grey;
-}
-label {
-  display: block;
-}
-</style>
 
-<form action=/grab method=post>
-  <label>
-    kind
-    <input readonly name=kind value=lnd>
-  </label>
-
-  <label>
-    desired username
-    <input name=name>
-  </label>
-
-  <label>
-    host
-    <input name=host>
-  </label>
-
-  <label>
-    macaroon
-    <input name=key>
-  </label>
-
-  <button>submit</button>
-</form>
-
-<form action=/grab method=post>
-  <label>
-    kind
-    <input readonly name=kind value=sparko>
-  </label>
-
-  <label>
-    desired username
-    <input name=name>
-  </label>
-
-  <label>
-    host
-    <input name=host>
-  </label>
-
-  <label>
-    key
-    <input name=key>
-  </label>
-
-  <button>submit</button>
-</form>
-
-<form action=/grab method=post>
-  <label>
-    kind
-    <input readonly name=kind value=lnbits>
-  </label>
-
-  <label>
-    desired username
-    <input name=name>
-  </label>
-
-  <label>
-    host
-    <input name=host>
-  </label>
-
-  <label>
-    key
-    <input name=key>
-  </label>
-
-  <button>submit</button>
-</form>
-
-<form action=/grab method=post>
-  <label>
-    kind
-    <input readonly name=kind value=lnpay>
-  </label>
-
-  <label>
-    desired username
-    <input name=name>
-  </label>
-
-  <label>
-    pak
-    <input name=pak>
-  </label>
-
-  <label>
-    waki
-    <input name=waki>
-  </label>
-
-  <button>submit</button>
-</form>
+Vue.createApp(Main).mount('#main')
+    </script>
+  </body>
+</html>
