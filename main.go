@@ -19,10 +19,11 @@ import (
 )
 
 type Settings struct {
-	Host   string `envconfig:"HOST" default:"0.0.0.0"`
-	Port   string `envconfig:"PORT" required:"true"`
-	Domain string `envconfig:"DOMAIN" required:"true"`
-	Secret string `envconfig:"SECRET" required:"true"`
+	Host      string `envconfig:"HOST" default:"0.0.0.0"`
+	Port      string `envconfig:"PORT" required:"true"`
+	Domain    string `envconfig:"DOMAIN" required:"true"`
+	Secret    string `envconfig:"SECRET" required:"true"`
+	SiteOwner string `envconfig:"SITE_OWNER" required:"true"`
 }
 
 var s Settings
@@ -50,7 +51,7 @@ func main() {
 	router.Path("/").HandlerFunc(
 		func(w http.ResponseWriter, r *http.Request) {
 			w.Header().Set("content-type", "text/html")
-			fmt.Fprintf(w, html)
+			fmt.Fprintf(w, html+"<p>offered by %s</p>", s.SiteOwner)
 		},
 	)
 
