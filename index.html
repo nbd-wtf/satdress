@@ -1,34 +1,112 @@
 <!doctype html>
 
 <style>
+main {
+  display: flex;
+  flex-wrap: wrap;
+}
+form {
+  display: block;
+  padding: 20px;
+  margin: 20px;
+  border: dotted 2px grey;
+}
 label {
   display: block;
 }
 </style>
 
-<form action="/grab" method="post">
+<form action=/grab method=post>
   <label>
-    desired username
-    <input name="name">
+    kind
+    <input readonly name=kind value=lnd>
   </label>
 
   <label>
-    kind
-    <select name="kind">
-      <option>lnd</option>
-      <option>sparko</option>
-      <option>lnbits</option>
-    </select>
+    desired username
+    <input name=name>
   </label>
 
   <label>
     host
-    <input name="host">
+    <input name=host>
   </label>
 
   <label>
-    key or macaroon
-    <input name="key">
+    macaroon
+    <input name=key>
+  </label>
+
+  <button>submit</button>
+</form>
+
+<form action=/grab method=post>
+  <label>
+    kind
+    <input readonly name=kind value=sparko>
+  </label>
+
+  <label>
+    desired username
+    <input name=name>
+  </label>
+
+  <label>
+    host
+    <input name=host>
+  </label>
+
+  <label>
+    key
+    <input name=key>
+  </label>
+
+  <button>submit</button>
+</form>
+
+<form action=/grab method=post>
+  <label>
+    kind
+    <input readonly name=kind value=lnbits>
+  </label>
+
+  <label>
+    desired username
+    <input name=name>
+  </label>
+
+  <label>
+    host
+    <input name=host>
+  </label>
+
+  <label>
+    key
+    <input name=key>
+  </label>
+
+  <button>submit</button>
+</form>
+
+<form action=/grab method=post>
+  <label>
+    kind
+    <input readonly name=kind value=lnpay>
+  </label>
+
+  <label>
+    desired username
+    <input name=name>
+  </label>
+
+  <label>
+    pak
+    <input name=pak>
+  </label>
+
+  <label>
+    waki
+    <input name=waki>
   </label>
 
   <button>submit</button>

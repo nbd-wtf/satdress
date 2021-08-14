@@ -72,12 +72,23 @@ func main() {
 				closer.Close()
 			}
 
-			data, _ := json.Marshal(Params{
+			params := Params{
 				Kind: r.FormValue("kind"),
 				Host: r.FormValue("host"),
 				Key:  r.FormValue("key"),
-			})
+				Pak:  r.FormValue("pak"),
+				Waki: r.FormValue("waki"),
+			}
 
+			// check if the given data works
+			if _, err := makeInvoice(params, 1000); err != nil {
+				w.WriteHeader(400)
+				fmt.Fprint(w, "couldn't make an invoice with the given data: "+err.Error())
+				return
+			}
+
+			// save it
+			data, _ := json.Marshal(params)
 			if err := db.Set(name, data, pebble.Sync); err != nil {
 				w.WriteHeader(500)
 				fmt.Fprint(w, "error! "+err.Error())
