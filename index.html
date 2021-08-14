@@ -1,35 +1,203 @@
-<!doctype html>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Satdress - Federated Lightning Address Server</title>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/png" href="https://i.imgur.com/4yaPtA2.png" />
+    <meta
+      property="og:title"
+      content="Satdress - Federated Lightning Address Server"
+    />
+    <meta
+      property="og:type"
+      content="website"
+    />
+    <meta
+      property="og:url"
+      content="https://github.com/fiatjaf/satdress"
+    />
+    <meta
+      property="og:description"
+      content="Satdress is a Federated Lightning Address server allowing you to connect Lightning nodes to Lightning Addresses. Satdress follows the Lightning Address protocol and aims to provide an easy-to-deploy Bridge Server."
+    />
+    <meta
+      property="og:image"
+      content="https://i.imgur.com/IYkJa8f.png"
+    />
+  </head>
+  <style>
+    body {
+      display: flex;
+      align-items: center;
+      background: #f3f3f3;
+      flex-direction: column;
+      font-family: 'PT Sans';
+      justify-content: center;
+      padding: 60px 20px 40px 20px;
+    }
 
-<style>
-label {
-  display: block;
-}
-</style>
+    .title {
+      font-size: 40px;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
 
-<form action="/grab" method="post">
-  <label>
-    desired username
-    <input name="name">
-  </label>
+    .tagline {
+      opacity: 0.7;
+      font-size: 18px;
+      font-weight: 400;
+      text-align: center;
+      letter-spacing: 0.5px;
+    }
 
-  <label>
-    kind
-    <select name="kind">
-      <option>lnd</option>
-      <option>sparko</option>
-      <option>lnbits</option>
-    </select>
-  </label>
+    .description {
+      opacity: 0.7;
+      font-size: 18px;
+      font-weight: 400;
+      max-width: 320px;
+      text-align: center;
+      margin-bottom: 40px;
+      letter-spacing: 0.5px;
+    }
 
-  <label>
-    host
-    <input name="host">
-  </label>
+    .card {
+      max-width: 400px;
+      background: #fff;
+      border-radius: 8px;
+      padding: 30px 40px;
+      margin: 20px 0 20px;
+      border: 1px solid #999;
+    }
 
-  <label>
-    key or macaroon
-    <input name="key">
-  </label>
+    .submit-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 
-  <button>submit</button>
-</form>
+    .submit {
+      width: 100%;
+      color: #fff;
+      outline: none;
+      font-size: 16px;
+      cursor: pointer;
+      font-weight: 600;
+      margin-top: 20px;
+      padding: 12px 8px;
+      border-radius: 8px;
+      letter-spacing: 0.5px;
+      border: 1px solid rgba(86, 46, 249, 0.85);
+      background-color: rgba(86, 46, 249, 0.75);
+    }
+
+    .submit:hover {
+      background-color: rgba(86, 46, 249, 0.85);
+    }
+
+    .label {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 5px;
+      letter-spacing: 0.5px;
+    }
+
+    .input {
+      height: 35px;
+      outline: none;
+      padding: 0 10px;
+      font-size: 14px;
+      border-radius: 5px;
+      margin-bottom: 25px;
+      letter-spacing: 0.5px;
+      border: 1px solid #999;
+      background-color: #f3f3f3;
+    }
+
+    select {
+      height: 35px;
+      outline: none;
+      padding: 0 5px;
+      font-size: 14px;
+      border-radius: 5px;
+      margin-bottom: 25px;
+      letter-spacing: 0.5px;
+      border: 1px solid #999;
+      background-color: #f3f3f3;
+    }
+
+    label {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .resources {
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .resource-button {
+      padding: 8px;
+      color: #8062fb;
+      font-weight: 400;
+      margin-bottom: 8px;
+      border-radius: 7px;
+      text-decoration: none;
+    }
+
+    .resource-button:hover {
+      color: #8062fb;
+      background: rgba(42,0,255,0.1);
+    }
+  </style>
+  <body>
+    <div class="title">Satdress</div>
+    <div class="tagline">Federated Lightning Address Server</div>
+    <div class="card">
+      <div class="description">Use the form below to connect your own node to a <b>Lightning Address</b>. <br />You can also self-host this server.</div>
+      <form action="/grab" method="post">
+        <label>
+          <p class="label">
+            Desired Lightning Address
+          </p>
+          <input class="input" name="name">
+        </label>
+        <label>
+          <p class="label">
+            Type
+          </p>
+          <select name="kind">
+            <option>LND</option>
+            <option>Sparko</option>
+            <option>LNBits</option>
+          </select>
+        </label>
+        <label>
+          <p class="label">
+            Host (IP + Port)
+          </p>
+          <input class="input" name="host">
+        </label>
+        <label>
+          <p class="label">
+            Key or Invoice Macaroon
+          </p>
+          <input class="input" name="key">
+        </label>
+        <button class="submit">Submit</button>
+      </form>
+    </div>
+    <div class="resources">
+      <a class="resource-button" href="https://github.com/andrerfneves/lightning-address#readme" target="_blank">
+        Lightning Address Documentation
+      </a>
+      <a class="resource-button" href="https://github.com/fiatjaf/sataddress" target="_blank">
+        GitHub (MIT Licensed)
+      </a>
+    </div>
+  </body>
+</html>
+
+
