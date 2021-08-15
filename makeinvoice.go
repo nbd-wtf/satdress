@@ -9,13 +9,6 @@ import (
 	"github.com/tidwall/sjson"
 )
 
-type Params struct {
-	Name string
-	Kind string
-	Host string
-	Key  string
-}
-
 func makeMetadata(params Params) string {
 	metadata, _ := sjson.Set("[]", "0.0", "text/identifier")
 	metadata, _ = sjson.Set(metadata, "0.1", params.Name+"@"+s.Domain)
@@ -49,6 +42,11 @@ func makeInvoice(params Params, msat int) (bolt11 string, err error) {
 		backend = makeinvoice.LNBitsParams{
 			Host: params.Host,
 			Key:  params.Key,
+		}
+	case "lnpay":
+		backend = makeinvoice.LNPayParams{
+			PublicAccessKey:  params.Pak,
+			WalletInvoiceKey: params.Waki,
 		}
 	}
 

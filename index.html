@@ -38,6 +38,10 @@
 
     .title {
       font-size: 40px;
+<<<<<<< HEAD
+=======
+      text-align: center;
+>>>>>>> f98da7d981ce9e530596c805dfe5b00f2ed1f7eb
       font-weight: 700;
       letter-spacing: 1px;
     }
@@ -114,6 +118,20 @@
       background-color: #f3f3f3;
     }
 
+<<<<<<< HEAD
+=======
+    .suffix {
+      height: 35px;
+      display: inline-flex;
+      padding: 0 10px;
+      font-size: 14px;
+      align-items: center;
+      border-radius: 5px;
+      margin-bottom: 25px;
+      letter-spacing: 0.5px;
+    }
+
+>>>>>>> f98da7d981ce9e530596c805dfe5b00f2ed1f7eb
     select {
       height: 35px;
       outline: none;
@@ -153,51 +171,99 @@
     }
   </style>
   <body>
-    <div class="title">Satdress</div>
-    <div class="tagline">Federated Lightning Address Server</div>
-    <div class="card">
-      <div class="description">Use the form below to connect your own node to a <b>Lightning Address</b>. <br />You can also self-host this server.</div>
-      <form action="/grab" method="post">
-        <label>
-          <p class="label">
-            Desired Lightning Address
-          </p>
-          <input class="input" name="name">
-        </label>
-        <label>
-          <p class="label">
-            Type
-          </p>
-          <select name="kind">
-            <option>LND</option>
-            <option>Sparko</option>
-            <option>LNBits</option>
-          </select>
-        </label>
-        <label>
-          <p class="label">
-            Host (IP + Port)
-          </p>
-          <input class="input" name="host">
-        </label>
-        <label>
-          <p class="label">
-            Key or Invoice Macaroon
-          </p>
-          <input class="input" name="key">
-        </label>
-        <button class="submit">Submit</button>
-      </form>
-    </div>
-    <div class="resources">
-      <a class="resource-button" href="https://github.com/andrerfneves/lightning-address#readme" target="_blank">
-        Lightning Address Documentation
-      </a>
-      <a class="resource-button" href="https://github.com/fiatjaf/sataddress" target="_blank">
-        GitHub (MIT Licensed)
-      </a>
-    </div>
+    <main id="main">
+      <div class="title">Satdress</div>
+      <div class="tagline">Federated Lightning Address Server</div>
+      <div class="card">
+        <div class="description">Use the form below to connect your own node to a <b>Lightning Address</b>.</div>
+        <form action="/grab" method="post">
+          <label>
+            <p class="label">
+              Desired Username
+            </p>
+            <div style="position: relative;">
+              <input class="input" name="name">
+              <span class="suffix" style="position: absolute;">@{{ domain }}</span>
+            </div>
+          </label>
+          <label>
+            <p class="label">
+              Type
+            </p>
+            <select name="kind" v-model="kind">
+              <option value="lnd">LND</option>
+              <option value="sparko">Sparko</option>
+              <option value="lnpay">LNPay</option>
+              <option value="lnbits">LNbits</option>
+            </select>
+          </label>
+          <div v-if="kind == 'lnd'">
+            <label>
+              <p class="label">
+                Host (IP or domain + Port)
+              </p>
+              <input class="input" name="host">
+            </label>
+            <label>
+              <p class="label">
+                Macaroon
+              </p>
+              <input class="input" name="key">
+            </label>
+          </div>
+          <div v-if="kind == 'sparko' || kind == 'lnbits'">
+            <label>
+              <p class="label">
+                Host (IP or domain + Port)
+              </p>
+              <input class="input" name="host">
+            </label>
+            <label>
+              <p class="label">
+                Key
+              </p>
+              <input class="input" name="key">
+            </label>
+          </div>
+          <div v-if="kind == 'lnpay'">
+            <label>
+              <p class="label">
+                Public Access Key (pak)
+              </p>
+              <input class="input" name="pak">
+            </label>
+            <label>
+              <p class="label">
+                Wallet Invoice Key (waki)
+              </p>
+              <input class="input" name="waki">
+            </label>
+          </div>
+          <button class="submit">Submit</button>
+        </form>
+      </div>
+      <div class="resources">
+        <a class="resource-button" href="https://github.com/andrerfneves/lightning-address#readme" target="_blank">
+          Lightning Address Documentation
+        </a>
+        <a class="resource-button" :href="siteOwnerURL" target="_blank">Brought to you by {{ siteOwnerName }}</a>
+        <a class="resource-button" target="_blank" href="https://github.com/fiatjaf/satdress">You can host this server on your domain</a>
+      </div>
+    </main>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.2.2/vue.global.prod.min.js"></script>
+    <script>
+const initial = {} // REPLACED WITH SERVER DATA // {siteOwnerName, siteOwnerURL, siteName, domain}
+
+const Main = {
+  data() {
+    return {
+      kind: 'lnd',
+      ...initial
+    }
+  }
+}
+
+Vue.createApp(Main).mount('#main')
+    </script>
   </body>
 </html>
-
-
