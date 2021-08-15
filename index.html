@@ -4,6 +4,7 @@
     <title>Satdress - Federated Lightning Address Server</title>
     <meta charset="utf-8" />
     <link rel="icon" type="image/png" href="https://i.imgur.com/4yaPtA2.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta
       property="og:title"
       content="Satdress - Federated Lightning Address Server"
@@ -22,8 +23,15 @@
     />
     <meta
       property="og:image"
-      content="https://i.imgur.com/IYkJa8f.png"
+      content="https://i.imgur.com/PsT2uoR.png"
     />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@fiatjaf" />
+    <meta name="twitter:creator" content="@fiatjaf" />
+    <meta name="twitter:title" content="Satdress - Federated Lightning Address Server" />
+    <meta name="twitter:description" content="Satdress is a Federated Lightning Address server allowing you to connect Lightning nodes to Lightning Addresses. Satdress follows the Lightning Address protocol and aims to provide an easy-to-deploy Bridge Server." />
+    <meta name="twitter:image" content="https://i.imgur.com/PsT2uoR.png" />
   </head>
   <style>
     body {
@@ -38,8 +46,8 @@
 
     .title {
       font-size: 40px;
-      text-align: center;
       font-weight: 700;
+      text-align: center;
       letter-spacing: 1px;
     }
 
@@ -119,9 +127,10 @@
       height: 35px;
       display: inline-flex;
       padding: 0 10px;
-      font-size: 14px;
+      font-size: 16px;
+      font-weight: 600;
       align-items: center;
-      border-radius: 5px;
+      word-break: break-all;
       margin-bottom: 25px;
       letter-spacing: 0.5px;
     }
@@ -163,11 +172,64 @@
       color: #8062fb;
       background: rgba(42,0,255,0.1);
     }
+
+    .owner {
+      display: flex;
+      padding-top: 5px;
+      align-items: center;
+      flex-direction: row;
+      justify-content: center;
+    }
+
+    .owner-button {
+      padding: 8px;
+      color: #8062fb;
+      font-weight: 400;
+      margin-bottom: 8px;
+      border-radius: 7px;
+      text-decoration: none;
+    }
+
+    .owner-button:hover {
+      color: #8062fb;
+      background: rgba(42,0,255,0.1);
+    }
+
+    .owner-name {
+      font-weight: 600;
+    }
+
+    @media screen and (max-width: 500px) {
+      body {
+        padding: 20px 5px 30px 5px;
+      }
+
+      .title {
+        font-size: 30px;
+      }
+
+      .card {
+        padding: 25px;
+      }
+
+      .tagline {
+        font-size: 16px;
+        padding: 0 10px;
+      }
+    }
   </style>
   <body>
     <main id="main">
-      <div class="title">Satdress</div>
+      <div class="title">{{ siteName }}Satdress</div>
       <div class="tagline">Federated Lightning Address Server</div>
+      <div class="owner">
+        <a
+          class="owner-button"
+          :href="siteOwnerURL"
+          target="_blank">
+          Brought to you by <span class="owner-name">{{ siteOwnerName }}</span>
+        </a>
+      </div>
       <div class="card">
         <div class="description">Use the form below to connect your own node to a <b>Lightning Address</b>.</div>
         <form action="/grab" method="post">
@@ -182,7 +244,7 @@
           </label>
           <label>
             <p class="label">
-              Type
+              Node Backend Type
             </p>
             <select name="kind" v-model="kind">
               <option value="lnd">LND</option>
@@ -194,13 +256,13 @@
           <div v-if="kind == 'lnd'">
             <label>
               <p class="label">
-                Host (IP or domain + Port)
+                Host (IP or Domain + Port)
               </p>
               <input class="input" name="host">
             </label>
             <label>
               <p class="label">
-                Macaroon
+                Invoice Macaroon
               </p>
               <input class="input" name="key">
             </label>
@@ -208,7 +270,7 @@
           <div v-if="kind == 'sparko' || kind == 'lnbits'">
             <label>
               <p class="label">
-                Host (IP or domain + Port)
+                Host (IP or Domain + Port)
               </p>
               <input class="input" name="host">
             </label>
@@ -237,27 +299,36 @@
         </form>
       </div>
       <div class="resources">
-        <a class="resource-button" href="https://github.com/andrerfneves/lightning-address#readme" target="_blank">
+        <a
+          class="resource-button"
+          href="https://github.com/andrerfneves/lightning-address#readme"
+          target="_blank">
           Lightning Address Documentation
         </a>
-        <a class="resource-button" :href="siteOwnerURL" target="_blank">Brought to you by {{ siteOwnerName }}</a>
-        <a class="resource-button" target="_blank" href="https://github.com/fiatjaf/satdress">You can host this server on your domain</a>
+        <a
+          class="resource-button"
+          target="_blank"
+          href="https://github.com/fiatjaf/satdress">
+          Host this server on your domain!
+        </a>
       </div>
     </main>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.2.2/vue.global.prod.min.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.2.2/vue.global.prod.min.js"
+    ></script>
     <script>
-const initial = {} // REPLACED WITH SERVER DATA // {siteOwnerName, siteOwnerURL, siteName, domain}
+      const initial = {} // REPLACED WITH SERVER DATA // {siteOwnerName, siteOwnerURL, siteName, domain}
 
-const Main = {
-  data() {
-    return {
-      kind: 'lnd',
-      ...initial
-    }
-  }
-}
+      const Main = {
+        data() {
+          return {
+            kind: 'lnd',
+            ...initial,
+          }
+        }
+      };
 
-Vue.createApp(Main).mount('#main')
+      Vue.createApp(Main).mount('#main');
     </script>
   </body>
 </html>
