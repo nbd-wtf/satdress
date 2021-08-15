@@ -65,7 +65,7 @@ func main() {
 				SiteOwnerURL:  s.SiteOwnerURL,
 				SiteName:      s.SiteName,
 			})
-			fmt.Fprintf(w,
+			fmt.Fprint(w,
 				strings.ReplaceAll(
 					strings.ReplaceAll(
 						html, "{} // REPLACED WITH SERVER DATA", string(serverData),
