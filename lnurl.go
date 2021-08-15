@@ -32,6 +32,8 @@ func handleLNURL(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	params.Name = username
+
 	if amount := r.URL.Query().Get("amount"); amount == "" {
 		// check if the receiver accepts comments
 		var commentLength int64 = 0
