@@ -119,8 +119,8 @@ github.com/fiatjaf/lightningd-gjson-rpc v1.4.0 h1:Iv5tt4YuNoSMfR39wiV0tqnHYTJ85o
 github.com/fiatjaf/lightningd-gjson-rpc v1.4.0/go.mod h1:SQGA0qcY2qypaMXDQlE5V5+2MnLZzQ7NzfRsScliFeE=
 github.com/fiatjaf/ln-decodepay v1.0.0 h1:1YUMjvLock+BicMNwoZ/OA3oG2ZYEaJ8AzdS6EGVMTQ=
 github.com/fiatjaf/ln-decodepay v1.0.0/go.mod h1:/LWK+ZUa3i8MqbRjIMAiVQS2+NbhwKWlwib2n446cMQ=
-github.com/fiatjaf/makeinvoice v1.2.2 h1:dpvBiU2x7Bz9zASFXG0Hs9A8gUPWf6tiGzvDQSgasRc=
-github.com/fiatjaf/makeinvoice v1.2.2/go.mod h1:R+p/0XfRNob2hu+nyIiC2xaSy/HcdQ21rbNNuUHRB70=
+github.com/fiatjaf/makeinvoice v1.2.3 h1:a2tvuv4q823+2Q7gw9QGoPGhhTQ2LmMzgQjDF9zKXeM=
+github.com/fiatjaf/makeinvoice v1.2.3/go.mod h1:R+p/0XfRNob2hu+nyIiC2xaSy/HcdQ21rbNNuUHRB70=
 github.com/flosch/pongo2 v0.0.0-20190707114632-bbf5a6c351f4/go.mod h1:T9YF2M40nIgbVgp3rreNmTged+9HrbNTIQf1PsaIiTA=
 github.com/frankban/quicktest v1.2.2/go.mod h1:Qh/WofXFeiAFII1aEBu529AtJo6Zg2VHscnEsbBnJ20=
 github.com/fsnotify/fsnotify v1.4.7/go.mod h1:jwhsz4b93w/PPRr/qN1Yymfu8t87LnFCMoQvtojpjFo=
