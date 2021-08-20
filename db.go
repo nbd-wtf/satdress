@@ -21,10 +21,10 @@ type Params struct {
 }
 
 func SaveName(name string, params *Params, providedPin string) (pin string, err error) {
-	key := []byte(name + "@" + s.Domain)
+	key := []byte(name)
 
 	mac := hmac.New(sha256.New, []byte(s.Secret))
-	mac.Write(key)
+	mac.Write([]byte(name + "@" + s.Domain))
 	pin = hex.EncodeToString(mac.Sum(nil))
 
 	if _, closer, err := db.Get(key); err == nil {

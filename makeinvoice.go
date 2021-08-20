@@ -2,6 +2,7 @@ package main
 
 import (
 	"crypto/sha256"
+	"encoding/hex"
 	"strconv"
 	"time"
 
@@ -49,6 +50,11 @@ func makeInvoice(params *Params, msat int) (bolt11 string, err error) {
 			WalletInvoiceKey: params.Waki,
 		}
 	}
+
+	log.Debug().Int("msatoshi", msat).
+		Interface("backend", backend).
+		Str("description_hash", hex.EncodeToString(h[:])).
+		Msg("generating invoice")
 
 	// actually generate the invoice
 	return makeinvoice.MakeInvoice(makeinvoice.Params{
