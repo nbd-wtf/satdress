@@ -18,6 +18,7 @@ func handleLNURL(w http.ResponseWriter, r *http.Request) {
 		log.Error().Err(err).Str("name", username).Msg("failed to get name")
 		json.NewEncoder(w).Encode(lnurl.ErrorResponse(fmt.Sprintf(
 			"failed to get name %s", username)))
+		return
 	}
 
 	log.Info().Str("username", username).Msg("got lnurl request")
