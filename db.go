@@ -48,16 +48,18 @@ func SaveName(name string, params *Params, providedPin string) (pin string, err 
 	return pin, nil
 }
 
-func GetName(name string) (params *Params, err error) {
+func GetName(name string) (*Params, error) {
 	val, closer, err := db.Get([]byte(name))
 	if err != nil {
 		return nil, err
 	}
 	defer closer.Close()
-	if err := json.Unmarshal(val, params); err != nil {
+
+	var params Params
+	if err := json.Unmarshal(val, &params); err != nil {
 		return nil, err
 	}
 
 	params.Name = name
-	return params, nil
+	return &params, nil
 }
