@@ -78,7 +78,7 @@ func main() {
 
 	router.Path("/grab").HandlerFunc(
 		func(w http.ResponseWriter, r *http.Request) {
-			name := []byte(r.FormValue("name"))
+			name := []byte(r.FormValue("name") + "@" + s.Domain)
 
 			mac := hmac.New(sha256.New, []byte(s.Secret))
 			mac.Write(name)
