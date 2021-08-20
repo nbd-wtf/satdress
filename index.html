@@ -103,7 +103,17 @@
       background-color: rgba(86, 46, 249, 0.85);
     }
 
-    .label {
+    .field {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .row {
+      display: flex;
+      flex-direction: row;
+    }
+
+    label {
       margin: 0;
       font-size: 16px;
       font-weight: 600;
@@ -145,11 +155,6 @@
       letter-spacing: 0.5px;
       border: 1px solid #999;
       background-color: #f3f3f3;
-    }
-
-    label {
-      display: flex;
-      flex-direction: column;
     }
 
     .resources {
@@ -233,67 +238,79 @@
       <div class="card">
         <div class="description">Use the form below to connect your own node to a <b>Lightning Address</b>.</div>
         <form action="/grab" method="post">
-          <label>
-            <p class="label">
-              Desired Username
-            </p>
+          <div class="field">
+            <div class="row" style="justify-content: space-between">
+              <label for="name">
+                Desired Username
+              </label>
+              <label style="float: right">
+                Is New?
+                <input type="checkbox" v-model="isNew">
+              </label>
+            </div>
             <div style="position: relative;">
-              <input class="input" name="name">
+              <input class="input" name="name" id="name">
               <span class="suffix" style="position: absolute;">@{{ domain }}</span>
             </div>
-          </label>
-          <label>
-            <p class="label">
+          </div>
+          <div class="field">
+            <label for="kind">
               Node Backend Type
-            </p>
-            <select name="kind" v-model="kind">
+            </label>
+            <select name="kind" id="kind" id="kind" v-model="kind">
               <option value="lnd">LND</option>
               <option value="sparko">Sparko</option>
               <option value="lnpay">LNPay</option>
               <option value="lnbits">LNbits</option>
             </select>
-          </label>
+          </div>
           <div v-if="kind == 'lnd'">
-            <label>
-              <p class="label">
+            <div class="field">
+              <label for="host">
                 Host (IP or Domain + Port)
-              </p>
-              <input class="input" name="host">
-            </label>
-            <label>
-              <p class="label">
+              </label>
+              <input class="input" name="host" id="host">
+            </div>
+            <div class="field">
+              <label for="key">
                 Invoice Macaroon
-              </p>
-              <input class="input" name="key">
-            </label>
+              </label>
+              <input class="input" name="key" id="key">
+            </div>
           </div>
           <div v-if="kind == 'sparko' || kind == 'lnbits'">
-            <label>
-              <p class="label">
+            <div class="field">
+              <label for="host">
                 Host (IP or Domain + Port)
-              </p>
-              <input class="input" name="host">
-            </label>
-            <label>
-              <p class="label">
+              </label>
+              <input class="input" name="host" id="host">
+            </div>
+            <div class="field">
+              <label for="key">
                 Key
-              </p>
-              <input class="input" name="key">
-            </label>
+              </label>
+              <input class="input" name="key" id="key">
+            </div>
           </div>
           <div v-if="kind == 'lnpay'">
-            <label>
-              <p class="label">
+            <div class="field">
+              <label for="pak">
                 Public Access Key (pak)
-              </p>
-              <input class="input" name="pak">
-            </label>
-            <label>
-              <p class="label">
+              </label>
+              <input class="input" name="pak" id="pak">
+            </div>
+            <div class="field">
+              <label for="waki">
                 Wallet Invoice Key (waki)
-              </p>
-              <input class="input" name="waki">
+              </label>
+              <input class="input" name="waki" id="waki">
+            </div>
+          </div>
+          <div class="field" v-if="!isNew">
+            <label for="pin">
+              Pin
             </label>
+            <input class="input" name="pin" id="pin">
           </div>
           <button class="submit">Submit</button>
         </form>
@@ -323,6 +340,7 @@
         data() {
           return {
             kind: 'lnd',
+            isNew: true,
             ...initial,
           }
         }

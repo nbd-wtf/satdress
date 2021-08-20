@@ -1,10 +1,7 @@
 package main
 
 import (
-	"crypto/hmac"
-	"crypto/sha256"
 	_ "embed"
-	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -78,41 +75,16 @@ func main() {
 
 	router.Path("/grab").HandlerFunc(
 		func(w http.ResponseWriter, r *http.Request) {
-			name := []byte(r.FormValue("name") + "@" + s.Domain)
-
-			mac := hmac.New(sha256.New, []byte(s.Secret))
-			mac.Write(name)
-			pin := hex.EncodeToString(mac.Sum(nil))
-
-			if _, closer, err := db.Get(name); err == nil {
-				w.WriteHeader(401)
-				fmt.Fprint(w,
-					"name already exists! must provide pin (contact support).")
-				return
-			} else if err == nil {
-				closer.Close()
-			}
-
-			params := Params{
+			pin, err := SaveName(r.FormValue("name"), &Params{
 				Kind: r.FormValue("kind"),
 				Host: r.FormValue("host"),
 				Key:  r.FormValue("key"),
 				Pak:  r.FormValue("pak"),
 				Waki: r.FormValue("waki"),
-			}
-
-			// check if the given data works
-			if _, err := makeInvoice(params, 1000); err != nil {
-				w.WriteHeader(400)
-				fmt.Fprint(w, "couldn't make an invoice with the given data: "+err.Error())
-				return
-			}
-
-			// save it
-			data, _ := json.Marshal(params)
-			if err := db.Set(name, data, pebble.Sync); err != nil {
+			}, r.FormValue("pin"))
+			if err != nil {
 				w.WriteHeader(500)
-				fmt.Fprint(w, "error! "+err.Error())
+				fmt.Fprint(w, err.Error())
 				return
 			}
 
