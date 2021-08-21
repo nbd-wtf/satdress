@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"strings"
 
 	"github.com/cockroachdb/pebble"
 )
@@ -21,6 +22,7 @@ type Params struct {
 }
 
 func SaveName(name string, params *Params, providedPin string) (pin string, err error) {
+	name = strings.ToLower(name)
 	key := []byte(name)
 
 	mac := hmac.New(sha256.New, []byte(s.Secret))
@@ -49,6 +51,8 @@ func SaveName(name string, params *Params, providedPin string) (pin string, err 
 }
 
 func GetName(name string) (*Params, error) {
+	name = strings.ToLower(name)
+
 	val, closer, err := db.Get([]byte(name))
 	if err != nil {
 		return nil, err
