@@ -40,6 +40,8 @@ func main() {
 		log.Fatal().Err(err).Msg("couldn't process envconfig.")
 	}
 
+	s.Domain = strings.ToLower(s.Domain)
+
 	db, err = pebble.Open(s.Domain, nil)
 	if err != nil {
 		log.Fatal().Err(err).Str("path", s.Domain).Msg("failed to open db.")
