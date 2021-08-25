@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Satdress - Name Saved</title>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/png" href="https://i.imgur.com/4yaPtA2.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+  <body>
+    <main id="main">
+      name saved! this is your secret pin key for this name: {{ pin }}
+      this is the test invoice we've generated: {{ invoice }}
+    </main>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.2.2/vue.global.prod.min.js"
+    ></script>
+    <script>
+      const initial = {} // REPLACED WITH SERVER DATA
+
+      const Main = {
+        data() {
+          return {
+            ...initial,
+          }
+        }
+      };
+
+      Vue.createApp(Main).mount('#main');
+    </script>
+  </body>
+</html>

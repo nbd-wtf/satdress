@@ -1,8 +1,8 @@
 package main
 
 import (
+	"embed"
 	_ "embed"
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"os"
@@ -32,7 +32,13 @@ var router = mux.NewRouter()
 var log = zerolog.New(os.Stderr).Output(zerolog.ConsoleWriter{Out: os.Stderr})
 
 //go:embed index.html
-var html string
+var indexHTML string
+
+//go:embed grab.html
+var grabHTML string
+
+//go:embed static
+var static embed.FS
 
 func main() {
 	err := envconfig.Process("", &s)
@@ -52,32 +58,15 @@ func main() {
 
 	router.Path("/").HandlerFunc(
 		func(w http.ResponseWriter, r *http.Request) {
-			w.Header().Set("content-type", "text/html")
-			serverData, _ := json.Marshal(struct {
-				Domain        string `json:"domain"`
-				SiteOwnerName string `json:"siteOwnerName"`
-				SiteOwnerURL  string `json:"siteOwnerURL"`
-				SiteName      string `json:"siteName"`
-			}{
-				Domain:        s.Domain,
-				SiteOwnerName: s.SiteOwnerName,
-				SiteOwnerURL:  s.SiteOwnerURL,
-				SiteName:      s.SiteName,
-			})
-			fmt.Fprint(w,
-				strings.ReplaceAll(
-					strings.ReplaceAll(
-						html, "{} // REPLACED WITH SERVER DATA", string(serverData),
-					),
-					"Satdress", s.SiteName,
-				),
-			)
+			renderHTML(w, indexHTML, map[string]interface{}{})
 		},
 	)
 
+	router.PathPrefix("/static/").Handler(http.FileServer(http.FS(static)))
+
 	router.Path("/grab").HandlerFunc(
 		func(w http.ResponseWriter, r *http.Request) {
-			pin, err := SaveName(r.FormValue("name"), &Params{
+			pin, inv, err := SaveName(r.FormValue("name"), &Params{
 				Kind: r.FormValue("kind"),
 				Host: r.FormValue("host"),
 				Key:  r.FormValue("key"),
@@ -90,9 +79,10 @@ func main() {
 				return
 			}
 
-			fmt.Fprintf(w,
-				"name saved! this is your secret pin key for this name: %s",
-				pin)
+			renderHTML(w, grabHTML, struct {
+				PIN     string `json:"pin"`
+				Invoice string `json:"invoice"`
+			}{pin, inv})
 		},
 	)
 

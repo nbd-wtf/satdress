@@ -5,6 +5,7 @@
     <meta charset="utf-8" />
     <link rel="icon" type="image/png" href="https://i.imgur.com/4yaPtA2.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/static/style.css" />
     <meta
       property="og:title"
       content="Satdress - Federated Lightning Address Server"
@@ -33,196 +34,6 @@
     <meta name="twitter:description" content="Satdress is a Federated Lightning Address server allowing you to connect Lightning nodes to Lightning Addresses. Satdress follows the Lightning Address protocol and aims to provide an easy-to-deploy Bridge Server." />
     <meta name="twitter:image" content="https://i.imgur.com/PsT2uoR.png" />
   </head>
-  <style>
-    body {
-      display: flex;
-      align-items: center;
-      background: #f3f3f3;
-      flex-direction: column;
-      font-family: 'PT Sans';
-      justify-content: center;
-      padding: 60px 20px 40px 20px;
-    }
-
-    .title {
-      font-size: 40px;
-      font-weight: 700;
-      text-align: center;
-      letter-spacing: 1px;
-    }
-
-    .tagline {
-      opacity: 0.7;
-      font-size: 18px;
-      font-weight: 400;
-      text-align: center;
-      letter-spacing: 0.5px;
-    }
-
-    .description {
-      opacity: 0.7;
-      font-size: 18px;
-      font-weight: 400;
-      max-width: 320px;
-      text-align: center;
-      margin-bottom: 40px;
-      letter-spacing: 0.5px;
-    }
-
-    .card {
-      max-width: 400px;
-      background: #fff;
-      border-radius: 8px;
-      padding: 30px 40px;
-      margin: 20px 0 20px;
-      border: 1px solid #999;
-    }
-
-    .submit-wrapper {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .submit {
-      width: 100%;
-      color: #fff;
-      outline: none;
-      font-size: 16px;
-      cursor: pointer;
-      font-weight: 600;
-      margin-top: 20px;
-      padding: 12px 8px;
-      border-radius: 8px;
-      letter-spacing: 0.5px;
-      border: 1px solid rgba(86, 46, 249, 0.85);
-      background-color: rgba(86, 46, 249, 0.75);
-    }
-
-    .submit:hover {
-      background-color: rgba(86, 46, 249, 0.85);
-    }
-
-    .field {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .row {
-      display: flex;
-      flex-direction: row;
-    }
-
-    label {
-      margin: 0;
-      font-size: 16px;
-      font-weight: 600;
-      margin-bottom: 5px;
-      letter-spacing: 0.5px;
-    }
-
-    .input {
-      height: 35px;
-      outline: none;
-      padding: 0 10px;
-      font-size: 14px;
-      border-radius: 5px;
-      margin-bottom: 25px;
-      letter-spacing: 0.5px;
-      border: 1px solid #999;
-      background-color: #f3f3f3;
-    }
-
-    .suffix {
-      height: 35px;
-      display: inline-flex;
-      padding: 0 10px;
-      font-size: 16px;
-      font-weight: 600;
-      align-items: center;
-      word-break: break-all;
-      margin-bottom: 25px;
-      letter-spacing: 0.5px;
-    }
-
-    select {
-      height: 35px;
-      outline: none;
-      padding: 0 5px;
-      font-size: 14px;
-      border-radius: 5px;
-      margin-bottom: 25px;
-      letter-spacing: 0.5px;
-      border: 1px solid #999;
-      background-color: #f3f3f3;
-    }
-
-    .resources {
-      display: flex;
-      align-items: center;
-      flex-direction: column;
-      justify-content: center;
-    }
-
-    .resource-button {
-      padding: 8px;
-      color: #8062fb;
-      font-weight: 400;
-      margin-bottom: 8px;
-      border-radius: 7px;
-      text-decoration: none;
-    }
-
-    .resource-button:hover {
-      color: #8062fb;
-      background: rgba(42,0,255,0.1);
-    }
-
-    .owner {
-      display: flex;
-      padding-top: 5px;
-      align-items: center;
-      flex-direction: row;
-      justify-content: center;
-    }
-
-    .owner-button {
-      padding: 8px;
-      color: #8062fb;
-      font-weight: 400;
-      margin-bottom: 8px;
-      border-radius: 7px;
-      text-decoration: none;
-    }
-
-    .owner-button:hover {
-      color: #8062fb;
-      background: rgba(42,0,255,0.1);
-    }
-
-    .owner-name {
-      font-weight: 600;
-    }
-
-    @media screen and (max-width: 500px) {
-      body {
-        padding: 20px 5px 30px 5px;
-      }
-
-      .title {
-        font-size: 30px;
-      }
-
-      .card {
-        padding: 25px;
-      }
-
-      .tagline {
-        font-size: 16px;
-        padding: 0 10px;
-      }
-    }
-  </style>
   <body>
     <main id="main">
       <div class="title">Satdress</div>
@@ -334,7 +145,7 @@
       src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.2.2/vue.global.prod.min.js"
     ></script>
     <script>
-      const initial = {} // REPLACED WITH SERVER DATA // {siteOwnerName, siteOwnerURL, siteName, domain}
+      const initial = {} // REPLACED WITH SERVER DATA //
 
       const Main = {
         data() {

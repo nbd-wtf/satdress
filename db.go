@@ -21,7 +21,11 @@ type Params struct {
 	Waki string
 }
 
-func SaveName(name string, params *Params, providedPin string) (pin string, err error) {
+func SaveName(
+	name string,
+	params *Params,
+	providedPin string,
+) (pin string, inv string, err error) {
 	name = strings.ToLower(name)
 	key := []byte(name)
 
@@ -32,22 +36,22 @@ func SaveName(name string, params *Params, providedPin string) (pin string, err 
 	if _, closer, err := db.Get(key); err == nil {
 		defer closer.Close()
 		if pin != providedPin {
-			return "", errors.New("name already exists! must provide pin.")
+			return "", "", errors.New("name already exists! must provide pin.")
 		}
 	}
 
 	// check if the given data works
-	if _, err := makeInvoice(params, 1000); err != nil {
-		return "", fmt.Errorf("couldn't make an invoice with the given data: %w", err)
+	if inv, err = makeInvoice(params, 1000); err != nil {
+		return "", "", fmt.Errorf("couldn't make an invoice with the given data: %w", err)
 	}
 
 	// save it
 	data, _ := json.Marshal(params)
 	if err := db.Set(key, data, pebble.Sync); err != nil {
-		return "", err
+		return "", "", err
 	}
 
-	return pin, nil
+	return pin, inv, nil
 }
 
 func GetName(name string) (*Params, error) {
