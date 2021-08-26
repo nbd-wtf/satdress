@@ -2,6 +2,7 @@ package main
 
 import (
 	"crypto/sha256"
+	"encoding/hex"
 	"strconv"
 	"time"
 
@@ -9,7 +10,7 @@ import (
 	"github.com/tidwall/sjson"
 )
 
-func makeMetadata(params Params) string {
+func makeMetadata(params *Params) string {
 	metadata, _ := sjson.Set("[]", "0.0", "text/identifier")
 	metadata, _ = sjson.Set(metadata, "0.1", params.Name+"@"+s.Domain)
 
@@ -21,7 +22,7 @@ func makeMetadata(params Params) string {
 	return metadata
 }
 
-func makeInvoice(params Params, msat int) (bolt11 string, err error) {
+func makeInvoice(params *Params, msat int) (bolt11 string, err error) {
 	// description_hash
 	h := sha256.Sum256([]byte(makeMetadata(params)))
 
@@ -49,6 +50,11 @@ func makeInvoice(params Params, msat int) (bolt11 string, err error) {
 			WalletInvoiceKey: params.Waki,
 		}
 	}
+
+	log.Debug().Int("msatoshi", msat).
+		Interface("backend", backend).
+		Str("description_hash", hex.EncodeToString(h[:])).
+		Msg("generating invoice")
 
 	// actually generate the invoice
 	return makeinvoice.MakeInvoice(makeinvoice.Params{

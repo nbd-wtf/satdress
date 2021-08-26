@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/cockroachdb/pebble"
 	"github.com/fiatjaf/go-lnurl"
 	"github.com/gorilla/mux"
 )
@@ -14,23 +13,15 @@ import (
 func handleLNURL(w http.ResponseWriter, r *http.Request) {
 	username := mux.Vars(r)["username"]
 
-	log.Info().Str("username", username).Msg("got lnurl request")
-
-	var params Params
-	val, closer, err := db.Get([]byte(username))
+	params, err := GetName(username)
 	if err != nil {
-		if err != pebble.ErrNotFound {
-			log.Error().Err(err).Str("name", username).
-				Msg("error getting data")
-		}
+		log.Error().Err(err).Str("name", username).Msg("failed to get name")
+		json.NewEncoder(w).Encode(lnurl.ErrorResponse(fmt.Sprintf(
+			"failed to get name %s", username)))
 		return
 	}
-	defer closer.Close()
-	if err := json.Unmarshal(val, &params); err != nil {
-		log.Error().Err(err).Str("name", username).Str("data", string(val)).
-			Msg("got broken json from db")
-		return
-	}
+
+	log.Info().Str("username", username).Msg("got lnurl request")
 
 	if amount := r.URL.Query().Get("amount"); amount == "" {
 		// check if the receiver accepts comments

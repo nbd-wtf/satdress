@@ -1,4 +1,4 @@
-satdress: $(shell find . -name "*.go")
+satdress: $(shell find . -name "*.go") index.html go.mod
 	CC=$$(which musl-gcc) go build -ldflags='-s -w -linkmode external -extldflags "-static"' -o ./satdress
 
 deploy: satdress
