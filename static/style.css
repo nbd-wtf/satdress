@@ -33,6 +33,17 @@ body {
   letter-spacing: 0.5px;
 }
 
+.bold-small {
+  opacity: 0.7;
+  font-size: 14px;
+  font-weight: 600;
+  max-width: 320px;
+  text-align: center;
+  margin-top: -20px;
+  margin-bottom: 20px;
+  letter-spacing: 0.5px;
+}
+
 .card {
   max-width: 400px;
   background: #fff;
@@ -67,6 +78,26 @@ body {
   background-color: rgba(86, 46, 249, 0.85);
 }
 
+.copy-button {
+  width: 100%;
+  color: #fff;
+  outline: none;
+  font-size: 16px;
+  cursor: pointer;
+  font-weight: 600;
+  margin-top: 20px;
+  padding: 12px 8px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  letter-spacing: 0.5px;
+  border: 1px solid rgba(86, 46, 249, 0.85);
+  background-color: rgba(86, 46, 249, 0.75);
+}
+
+.copy-button:hover {
+  background-color: rgba(86, 46, 249, 0.85);
+}
+
 .field {
   display: flex;
   flex-direction: column;
@@ -86,6 +117,7 @@ label {
 }
 
 .input {
+  width: 50%;
   height: 35px;
   outline: none;
   padding: 0 10px;
@@ -97,15 +129,20 @@ label {
   background-color: #f3f3f3;
 }
 
+.input.full-width {
+  width: calc(100% - 20px);
+}
+
 .suffix {
   height: 35px;
-  display: inline-flex;
+  width: 50%;
   padding: 0 10px;
+  margin-bottom: 25px;
+  display: inline-flex;
   font-size: 16px;
   font-weight: 600;
   align-items: center;
-  word-break: break-all;
-  margin-bottom: 25px;
+  word-break: keep-all;
   letter-spacing: 0.5px;
 }
 
@@ -139,7 +176,7 @@ select {
 
 .resource-button:hover {
   color: #8062fb;
-  background: rgba(42,0,255,0.1);
+  background: rgba(42,0,255,0.07);
 }
 
 .owner {
@@ -168,6 +205,20 @@ select {
   font-weight: 600;
 }
 
+.pin {
+  width: 320px;
+  background: #f3f3f3;
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 1px solid #999999;
+  overflow-x: scroll;
+}
+
+.domain-wrapper {
+  display: flex;
+  flex-direction: row;
+}
+
 @media screen and (max-width: 500px) {
   body {
     padding: 20px 5px 30px 5px;
@@ -184,5 +235,24 @@ select {
   .tagline {
     font-size: 16px;
     padding: 0 10px;
+  }
+
+  .domain-wrapper {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .input {
+    margin-bottom: 5px;
+    width: calc(100% - 25px);
+  }
+
+  .input.full-width {
+    margin-bottom: 25px;
+  }
+
+  .suffix {
+    padding: 0;
+    margin-bottom: 25px;
   }
 }

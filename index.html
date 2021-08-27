@@ -50,18 +50,14 @@
         <div class="description">Use the form below to connect your own node to a <b>Lightning Address</b>.</div>
         <form action="/grab" method="post">
           <div class="field">
-            <div class="row" style="justify-content: space-between">
+            <div class="row">
               <label for="name">
                 Desired Username
               </label>
-              <label style="float: right">
-                Is New?
-                <input type="checkbox" v-model="isNew">
-              </label>
             </div>
-            <div style="position: relative;">
+            <div class="domain-wrapper">
               <input class="input" name="name" id="name">
-              <span class="suffix" style="position: absolute;">@{{ domain }}</span>
+              <span class="suffix">@ln.fitti.co{{ domain }}</span>
             </div>
           </div>
           <div class="field">
@@ -80,13 +76,13 @@
               <label for="host">
                 Host (IP or Domain + Port)
               </label>
-              <input class="input" name="host" id="host">
+              <input class="input full-width" name="host" id="host">
             </div>
             <div class="field">
               <label for="key">
                 Invoice Macaroon
               </label>
-              <input class="input" name="key" id="key">
+              <input class="input full-width" name="key" id="key">
             </div>
           </div>
           <div v-if="kind == 'sparko' || kind == 'lnbits'">
@@ -94,13 +90,13 @@
               <label for="host">
                 Host (IP or Domain + Port)
               </label>
-              <input class="input" name="host" id="host">
+              <input class="input full-width" name="host" id="host">
             </div>
             <div class="field">
               <label for="key">
                 Key
               </label>
-              <input class="input" name="key" id="key">
+              <input class="input full-width" name="key" id="key">
             </div>
           </div>
           <div v-if="kind == 'lnpay'">
@@ -108,20 +104,27 @@
               <label for="pak">
                 Public Access Key (pak)
               </label>
-              <input class="input" name="pak" id="pak">
+              <input class="input full-width" name="pak" id="pak">
             </div>
             <div class="field">
               <label for="waki">
                 Wallet Invoice Key (waki)
               </label>
-              <input class="input" name="waki" id="waki">
+              <input class="input full-width" name="waki" id="waki">
             </div>
           </div>
+          <div class="field">
+            <label style="float: right">
+              This is a new Lightning Address
+              <input type="checkbox" v-model="isNew">
+            </label>
+          </div>
+          <br />
           <div class="field" v-if="!isNew">
             <label for="pin">
-              Pin
+              Secret PIN
             </label>
-            <input class="input" name="pin" id="pin">
+            <input class="input full-width" name="pin" id="pin">
           </div>
           <button class="submit">Submit</button>
         </form>
