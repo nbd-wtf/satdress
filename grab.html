@@ -4,35 +4,33 @@
     <title>Lightning Address Saved | Satdress</title>
     <meta charset="utf-8" />
     <link rel="icon" type="image/png" href="https://i.imgur.com/4yaPtA2.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="/static/style.css" />
     <meta
       property="og:title"
       content="Satdress - Federated Lightning Address Server"
     />
-    <meta
-      property="og:type"
-      content="website"
-    />
-    <meta
-      property="og:url"
-      content="https://github.com/fiatjaf/satdress"
-    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://github.com/fiatjaf/satdress" />
     <meta
       property="og:description"
       content="Satdress is a Federated Lightning Address server allowing you to connect Lightning nodes to Lightning Addresses. Satdress follows the Lightning Address protocol and aims to provide an easy-to-deploy Bridge Server."
     />
-    <meta
-      property="og:image"
-      content="https://i.imgur.com/PsT2uoR.png"
-    />
+    <meta property="og:image" content="https://i.imgur.com/PsT2uoR.png" />
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@fiatjaf" />
     <meta name="twitter:creator" content="@fiatjaf" />
-    <meta name="twitter:title" content="Satdress - Federated Lightning Address Server" />
-    <meta name="twitter:description" content="Satdress is a Federated Lightning Address server allowing you to connect Lightning nodes to Lightning Addresses. Satdress follows the Lightning Address protocol and aims to provide an easy-to-deploy Bridge Server." />
+    <meta
+      name="twitter:title"
+      content="Satdress - Federated Lightning Address Server"
+    />
+    <meta
+      name="twitter:description"
+      content="Satdress is a Federated Lightning Address server allowing you to connect Lightning nodes to Lightning Addresses. Satdress follows the Lightning Address protocol and aims to provide an easy-to-deploy Bridge Server."
+    />
     <meta name="twitter:image" content="https://i.imgur.com/PsT2uoR.png" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
   </head>
   <body>
     <main id="main">
@@ -42,37 +40,34 @@
           <b>username@domain.com</b> is your new Lightning Address!
         </div>
         <div class="bold-small">
-          In order to edit the configuration of this address in the future you must save this secret pin:
+          In order to edit the configuration of this address in the future you
+          must save this secret pin:
         </div>
-        <div class="code">
-          {{ pin }}
-        </div>
-        <button class="copy-button">Copy Secret PIN</button>
+        <div class="code">{{ pin }}</div>
+        <button class="copy-button" @click="copyToClipboard">
+          {{ copied ? 'Copied!' : 'Copy Secret PIN' }}
+        </button>
         <div class="bold-small">
-          To ensure the connection with your Lightning backend is configured properly, we've created a test invoice that can be seen below.
+          To ensure the connection with your Lightning backend is configured
+          properly, we've created a test invoice that can be seen below.
         </div>
-        <div class="code">
-          {{ invoice }}
-        </div>
+        <canvas id="qr"></canvas>
+        <div class="code">{{ invoice }}</div>
       </div>
       <div class="resources">
-        <a
-          class="resource-button"
-          target="_blank"
-          href="https://t.me/lnurl">
+        <a class="resource-button" target="_blank" href="https://t.me/lnurl">
           Not working? Ask for help!
         </a>
         <a
           class="resource-button"
           href="https://github.com/andrerfneves/lightning-address#readme"
-          target="_blank">
+          target="_blank"
+        >
           More information on Lightning Address
         </a>
       </div>
     </main>
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.2.2/vue.global.prod.min.js"
-    ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.2.2/vue.global.prod.min.js"></script>
     <script>
       const initial = {} // REPLACED WITH SERVER DATA
 
@@ -80,11 +75,30 @@
         data() {
           return {
             ...initial,
+            copied: false
           }
-        }
-      };
+        },
 
-      Vue.createApp(Main).mount('#main');
+        methods: {
+          copyToClipboard() {
+            navigator.clipboard.writeText(this.pin)
+            this.copied = true
+            setTimeout(() => {
+              this.copied = false
+            }, 5000)
+          }
+        },
+
+        mounted() {
+          new QRious({
+            element: document.getElementById('qr'),
+            value: this.invoice,
+            size: 300
+          })
+        }
+      }
+
+      Vue.createApp(Main).mount('#main')
     </script>
   </body>
 </html>

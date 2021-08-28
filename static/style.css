@@ -175,7 +175,7 @@ select {
 
 .resource-button:hover {
   color: #8062fb;
-  background: rgba(42,0,255,0.07);
+  background: rgba(42, 0, 255, 0.07);
 }
 
 .owner {
@@ -197,7 +197,7 @@ select {
 
 .owner-button:hover {
   color: #8062fb;
-  background: rgba(42,0,255,0.1);
+  background: rgba(42, 0, 255, 0.1);
 }
 
 .owner-name {
@@ -217,6 +217,11 @@ select {
 .domain-wrapper {
   display: flex;
   flex-direction: row;
+}
+
+#qr {
+  margin: 20px auto;
+  display: block;
 }
 
 @media screen and (max-width: 500px) {
