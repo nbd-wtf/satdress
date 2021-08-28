@@ -4,34 +4,31 @@
     <title>Satdress - Federated Lightning Address Server</title>
     <meta charset="utf-8" />
     <link rel="icon" type="image/png" href="https://i.imgur.com/4yaPtA2.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="/static/style.css" />
     <meta
       property="og:title"
       content="Satdress - Federated Lightning Address Server"
     />
-    <meta
-      property="og:type"
-      content="website"
-    />
-    <meta
-      property="og:url"
-      content="https://github.com/fiatjaf/satdress"
-    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://github.com/fiatjaf/satdress" />
     <meta
       property="og:description"
       content="Satdress is a Federated Lightning Address server allowing you to connect Lightning nodes to Lightning Addresses. Satdress follows the Lightning Address protocol and aims to provide an easy-to-deploy Bridge Server."
     />
-    <meta
-      property="og:image"
-      content="https://i.imgur.com/PsT2uoR.png"
-    />
+    <meta property="og:image" content="https://i.imgur.com/PsT2uoR.png" />
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@fiatjaf" />
     <meta name="twitter:creator" content="@fiatjaf" />
-    <meta name="twitter:title" content="Satdress - Federated Lightning Address Server" />
-    <meta name="twitter:description" content="Satdress is a Federated Lightning Address server allowing you to connect Lightning nodes to Lightning Addresses. Satdress follows the Lightning Address protocol and aims to provide an easy-to-deploy Bridge Server." />
+    <meta
+      name="twitter:title"
+      content="Satdress - Federated Lightning Address Server"
+    />
+    <meta
+      name="twitter:description"
+      content="Satdress is a Federated Lightning Address server allowing you to connect Lightning nodes to Lightning Addresses. Satdress follows the Lightning Address protocol and aims to provide an easy-to-deploy Bridge Server."
+    />
     <meta name="twitter:image" content="https://i.imgur.com/PsT2uoR.png" />
   </head>
   <body>
@@ -39,31 +36,27 @@
       <div class="title">{{ siteName }}</div>
       <div class="tagline">Federated Lightning Address Server</div>
       <div class="owner">
-        <a
-          class="owner-button"
-          :href="siteOwnerURL"
-          target="_blank">
+        <a class="owner-button" :href="siteOwnerURL" target="_blank">
           Brought to you by <span class="owner-name">{{ siteOwnerName }}</span>
         </a>
       </div>
       <div class="card">
-        <div class="description">Use the form below to connect your own node to a <b>Lightning Address</b>.</div>
+        <div class="description">
+          Use the form below to connect your own node to a
+          <b>Lightning Address</b>.
+        </div>
         <form action="/grab" method="post">
           <div class="field">
             <div class="row">
-              <label for="name">
-                Desired Username
-              </label>
+              <label for="name"> Desired Username </label>
             </div>
             <div class="domain-wrapper">
-              <input class="input" name="name" id="name">
+              <input class="input" name="name" id="name" />
               <span class="suffix">@{{ domain }}</span>
             </div>
           </div>
           <div class="field">
-            <label for="kind">
-              Node Backend Type
-            </label>
+            <label for="kind"> Node Backend Type </label>
             <select name="kind" id="kind" id="kind" v-model="kind">
               <option value="lnd">LND</option>
               <option value="sparko">Sparko</option>
@@ -73,58 +66,44 @@
           </div>
           <div v-if="kind == 'lnd'">
             <div class="field">
-              <label for="host">
-                Host (IP or Domain + Port)
-              </label>
-              <input class="input full-width" name="host" id="host">
+              <label for="host"> Host (IP or Domain + Port) </label>
+              <input class="input full-width" name="host" id="host" />
             </div>
             <div class="field">
-              <label for="key">
-                Invoice Macaroon
-              </label>
-              <input class="input full-width" name="key" id="key">
+              <label for="key"> Invoice Macaroon </label>
+              <input class="input full-width" name="key" id="key" />
             </div>
           </div>
           <div v-if="kind == 'sparko' || kind == 'lnbits'">
             <div class="field">
-              <label for="host">
-                Host (IP or Domain + Port)
-              </label>
-              <input class="input full-width" name="host" id="host">
+              <label for="host"> Host (IP or Domain + Port) </label>
+              <input class="input full-width" name="host" id="host" />
             </div>
             <div class="field">
-              <label for="key">
-                Key
-              </label>
-              <input class="input full-width" name="key" id="key">
+              <label for="key"> Key </label>
+              <input class="input full-width" name="key" id="key" />
             </div>
           </div>
           <div v-if="kind == 'lnpay'">
             <div class="field">
-              <label for="pak">
-                Public Access Key (pak)
-              </label>
-              <input class="input full-width" name="pak" id="pak">
+              <label for="pak"> Public Access Key (pak) </label>
+              <input class="input full-width" name="pak" id="pak" />
             </div>
             <div class="field">
-              <label for="waki">
-                Wallet Invoice Key (waki)
-              </label>
-              <input class="input full-width" name="waki" id="waki">
+              <label for="waki"> Wallet Invoice Key (waki) </label>
+              <input class="input full-width" name="waki" id="waki" />
             </div>
           </div>
           <div class="field">
             <label style="float: right">
               This is a new Lightning Address
-              <input type="checkbox" v-model="isNew">
+              <input type="checkbox" v-model="isNew" />
             </label>
           </div>
           <br />
           <div class="field" v-if="!isNew">
-            <label for="pin">
-              Secret PIN
-            </label>
-            <input class="input full-width" name="pin" id="pin">
+            <label for="pin"> Secret PIN </label>
+            <input class="input full-width" name="pin" id="pin" />
           </div>
           <button class="submit">Submit</button>
         </form>
@@ -133,20 +112,20 @@
         <a
           class="resource-button"
           href="https://github.com/andrerfneves/lightning-address#readme"
-          target="_blank">
+          target="_blank"
+        >
           Lightning Address Documentation
         </a>
         <a
           class="resource-button"
           target="_blank"
-          href="https://github.com/fiatjaf/satdress">
+          href="https://github.com/fiatjaf/satdress"
+        >
           Host this server on your domain!
         </a>
       </div>
     </main>
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.2.2/vue.global.prod.min.js"
-    ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.2.2/vue.global.prod.min.js"></script>
     <script>
       const initial = {} // REPLACED WITH SERVER DATA //
 
@@ -155,12 +134,12 @@
           return {
             kind: 'lnd',
             isNew: true,
-            ...initial,
+            ...initial
           }
         }
-      };
+      }
 
-      Vue.createApp(Main).mount('#main');
+      Vue.createApp(Main).mount('#main')
     </script>
   </body>
 </html>
