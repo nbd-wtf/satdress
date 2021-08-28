@@ -44,18 +44,14 @@
         <div class="bold-small">
           In order to edit the configuration of this address in the future you must save this secret pin:
         </div>
-        <div class="pin">
+        <div class="code">
           {{ pin }}
         </div>
         <button class="copy-button">Copy Secret PIN</button>
-        <div class="divider"></div>
-        <div class="description">
+        <div class="bold-small">
           To ensure the connection with your Lightning backend is configured properly, we've created a test invoice that can be seen below.
         </div>
-        <div class="bold-small">
-          If you do not see an invoice QR code below, something in your setup was incorrect.
-        </div>
-        <div class="qr">
+        <div class="code">
           {{ invoice }}
         </div>
       </div>
