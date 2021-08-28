@@ -8,6 +8,10 @@ body {
   padding: 60px 20px 40px 20px;
 }
 
+.hidden {
+  display: none;
+}
+
 .title {
   font-size: 40px;
   font-weight: 700;

@@ -2,7 +2,7 @@ package main
 
 import (
 	"crypto/sha256"
-	"encoding/hex"
+	"fmt"
 	"strconv"
 	"time"
 
@@ -22,10 +22,11 @@ func makeMetadata(params *Params) string {
 	return metadata
 }
 
-func makeInvoice(params *Params, msat int) (bolt11 string, err error) {
-	// description_hash
-	h := sha256.Sum256([]byte(makeMetadata(params)))
-
+func makeInvoice(
+	params *Params,
+	msat int,
+	pin *string,
+) (bolt11 string, err error) {
 	// prepare params
 	var backend makeinvoice.BackendParams
 	switch params.Kind {
@@ -51,17 +52,29 @@ func makeInvoice(params *Params, msat int) (bolt11 string, err error) {
 		}
 	}
 
-	log.Debug().Int("msatoshi", msat).
-		Interface("backend", backend).
-		Str("description_hash", hex.EncodeToString(h[:])).
-		Msg("generating invoice")
-
-	// actually generate the invoice
-	return makeinvoice.MakeInvoice(makeinvoice.Params{
-		Msatoshi:        int64(msat),
-		DescriptionHash: h[:],
-		Backend:         backend,
+	mip := makeinvoice.Params{
+		Msatoshi: int64(msat),
+		Backend:  backend,
 
 		Label: s.Domain + "/" + strconv.FormatInt(time.Now().Unix(), 16),
-	})
+	}
+
+	if pin != nil {
+		// use this as the description
+		mip.Description = fmt.Sprintf("%s's PIN for '%s@%s' lightning address: %s", s.Domain, params.Name, s.Domain, *pin)
+	} else {
+		// make the lnurlpay description_hash
+		h := sha256.Sum256([]byte(makeMetadata(params)))
+		mip.DescriptionHash = h[:]
+	}
+
+	// actually generate the invoice
+	bolt11, err = makeinvoice.MakeInvoice(mip)
+
+	log.Debug().Int("msatoshi", msat).
+		Interface("backend", backend).
+		Str("bolt11", bolt11).Err(err).
+		Msg("invoice generation")
+
+	return bolt11, err
 }

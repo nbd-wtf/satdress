@@ -45,7 +45,7 @@ func handleLNURL(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		bolt11, err := makeInvoice(params, msat)
+		bolt11, err := makeInvoice(params, msat, nil)
 		if err != nil {
 			json.NewEncoder(w).Encode(
 				lnurl.ErrorResponse("failed to create invoice: " + err.Error()))

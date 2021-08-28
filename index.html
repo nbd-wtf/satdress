@@ -58,6 +58,7 @@
           <div class="field">
             <label for="kind"> Node Backend Type </label>
             <select name="kind" id="kind" id="kind" v-model="kind">
+              <option disabled value="">Please select one:</option>
               <option value="lnd">LND</option>
               <option value="sparko">Sparko</option>
               <option value="lnpay">LNPay</option>
@@ -136,6 +137,10 @@
             isNew: true,
             ...initial
           }
+        },
+
+        mounted() {
+          this.kind = ''
         }
       }
 
