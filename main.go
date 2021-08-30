@@ -66,7 +66,9 @@ func main() {
 
 	router.Path("/grab").HandlerFunc(
 		func(w http.ResponseWriter, r *http.Request) {
-			pin, inv, err := SaveName(r.FormValue("name"), &Params{
+			name := r.FormValue("name")
+
+			pin, inv, err := SaveName(name, &Params{
 				Kind: r.FormValue("kind"),
 				Host: r.FormValue("host"),
 				Key:  r.FormValue("key"),
@@ -82,7 +84,8 @@ func main() {
 			renderHTML(w, grabHTML, struct {
 				PIN     string `json:"pin"`
 				Invoice string `json:"invoice"`
-			}{pin, inv})
+				Name    string `json:"name"`
+			}{pin, inv, name})
 		},
 	)
 
