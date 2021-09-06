@@ -43,12 +43,18 @@
           </div>
           <div v-if="kind == 'lnd'">
             <div class="field">
-              <label for="host"> Host (IP or Domain + Port) </label>
-              <input class="input full-width" name="host" id="host" />
+              <label for="host"> LND REST Host (Protocol + IP/Domain + Port) </label>
+              <input
+                class="input full-width" name="host" id="host"
+                placeholder="https://foo.bar:8080"
+              />
             </div>
             <div class="field">
-              <label for="key"> Invoice Macaroon </label>
-              <input class="input full-width" name="key" id="key" />
+              <label for="key"> Invoice Macaroon (base64 encoded) </label>
+              <input
+                class="input full-width" name="key" id="key"
+                placeholder="V2UgYWxsIGxvdmUgQGZpYXRqYWYhCg=="
+              />
             </div>
           </div>
           <div v-if="kind == 'sparko' || kind == 'lnbits'">
