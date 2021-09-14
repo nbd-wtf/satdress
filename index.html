@@ -36,6 +36,7 @@
             <select name="kind" id="kind" id="kind" v-model="kind">
               <option disabled value="">Please select one:</option>
               <option value="lnd">LND</option>
+              <option value="eclair">Eclair</option>
               <option value="sparko">Sparko</option>
               <option value="lnpay">LNPay</option>
               <option value="lnbits">LNbits</option>
@@ -43,28 +44,61 @@
           </div>
           <div v-if="kind == 'lnd'">
             <div class="field">
-              <label for="host"> LND REST Host (Protocol + IP/Domain + Port) </label>
+              <label for="host">
+                LND REST Host (Protocol + IP/Domain + Port)
+              </label>
               <input
-                class="input full-width" name="host" id="host"
-                placeholder="https://foo.bar:8080"
+                class="input full-width"
+                name="host"
+                id="host"
+                placeholder="http://mylndonionztxrvxtzrs.onion:8080"
               />
             </div>
             <div class="field">
-              <label for="key"> Invoice Macaroon (base64 encoded) </label>
+              <label for="macaroon"> Invoice Macaroon (base64 encoded) </label>
               <input
-                class="input full-width" name="key" id="key"
+                class="input full-width"
+                name="key"
+                id="macaroon"
                 placeholder="V2UgYWxsIGxvdmUgQGZpYXRqYWYhCg=="
               />
             </div>
           </div>
           <div v-if="kind == 'sparko' || kind == 'lnbits'">
             <div class="field">
-              <label for="host"> Host (IP or Domain + Port) </label>
-              <input class="input full-width" name="host" id="host" />
+              <label for="host"> Host (Protocol + IP or Domain + Port) </label>
+              <input
+                class="input full-width"
+                name="host"
+                id="host"
+                placeholder="http://10.147.17.32:9737"
+              />
             </div>
             <div class="field">
               <label for="key"> Key </label>
               <input class="input full-width" name="key" id="key" />
+            </div>
+          </div>
+          <div v-if="kind == 'eclair'">
+            <div class="field">
+              <label for="host"> Host (Protocol + IP or Domain + Port) </label>
+              <input
+                class="input full-width"
+                name="host"
+                id="host"
+                placeholder="http://myeclair.com"
+              />
+            </div>
+            <div>
+              <p>
+                Don't input your Eclair password here nor expose your Eclair
+                node carelessly. Follow
+                <a
+                  href="https://gist.github.com/fiatjaf/8e74740d30763713154de15562e08789#file-exposing-eclair-md"
+                  >these instructions</a
+                >
+                instead (or do something better).
+              </p>
             </div>
           </div>
           <div v-if="kind == 'lnpay'">

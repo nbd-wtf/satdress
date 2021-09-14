@@ -50,6 +50,11 @@ func makeInvoice(
 			PublicAccessKey:  params.Pak,
 			WalletInvoiceKey: params.Waki,
 		}
+	case "eclair":
+		backend = makeinvoice.EclairParams{
+			Host:     params.Host,
+			Password: "",
+		}
 	}
 
 	mip := makeinvoice.Params{
