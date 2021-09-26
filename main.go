@@ -24,6 +24,8 @@ type Settings struct {
 	SiteOwnerName string `envconfig:"SITE_OWNER_NAME" required:"true"`
 	SiteOwnerURL  string `envconfig:"SITE_OWNER_URL" required:"true"`
 	SiteName      string `envconfig:"SITE_NAME" required:"true"`
+
+	TorProxyURL string `envconfig:"TOR_PROXY_URL"`
 }
 
 var s Settings
@@ -47,6 +49,10 @@ func main() {
 	}
 
 	s.Domain = strings.ToLower(s.Domain)
+
+	if s.TorProxyURL != "" {
+		makeinvoice.TorProxyURL = s.TorProxyURL
+	}
 
 	db, err = pebble.Open(s.Domain, nil)
 	if err != nil {
