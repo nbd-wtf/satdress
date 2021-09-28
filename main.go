@@ -2,7 +2,6 @@ package main
 
 import (
 	"embed"
-	_ "embed"
 	"fmt"
 	"net/http"
 	"os"
@@ -10,6 +9,7 @@ import (
 	"time"
 
 	"github.com/cockroachdb/pebble"
+	"github.com/fiatjaf/makeinvoice"
 	"github.com/gorilla/mux"
 	"github.com/kelseyhightower/envconfig"
 	_ "github.com/lib/pq"
