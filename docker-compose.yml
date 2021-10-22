@@ -1,0 +1,21 @@
+version: "3.7"
+
+services: 
+ satdress:
+    build: . 
+    container_name: satdress
+    environment:
+      - PORT=17422
+      - DOMAIN=satdress.com
+      - SECRET=askdbasjdhvakjvsdjasd
+      - SITE_OWNER_URL=https://t.me/fiatjaf
+      - SITE_OWNER_NAME=@fiatjaf
+      - SITE_NAME=Satdress
+    ports:
+      - 17422:17422
+    volumes:
+      - satdress-data:/satdress.com
+
+volumes:
+  satdress-data:
+    name: satdress-data
