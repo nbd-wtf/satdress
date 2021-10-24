@@ -19,3 +19,4 @@ services:
 volumes:
   satdress-data:
     name: satdress-data
+
