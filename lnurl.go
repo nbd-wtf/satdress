@@ -28,11 +28,22 @@ func handleLNURL(w http.ResponseWriter, r *http.Request) {
 		var commentLength int64 = 0
 		// TODO: support webhook comments
 
+		// convert configured sendable amounts to integer
+		minSendable, err := strconv.ParseInt(params.MinSendable, 10, 64)
+		// set defaults
+		if err != nil {
+			minSendable = 1000
+		}
+		maxSendable, err := strconv.ParseInt(params.MaxSendable, 10, 64)
+		if err != nil {
+			maxSendable = 100000000
+		}
+
 		json.NewEncoder(w).Encode(lnurl.LNURLPayResponse1{
 			LNURLResponse:   lnurl.LNURLResponse{Status: "OK"},
 			Callback:        fmt.Sprintf("https://%s/.well-known/lnurlp/%s", s.Domain, username),
-			MinSendable:     1000,
-			MaxSendable:     100000000,
+			MinSendable:     minSendable,
+			MaxSendable:     maxSendable,
 			EncodedMetadata: makeMetadata(params),
 			CommentAllowed:  commentLength,
 			Tag:             "payRequest",
