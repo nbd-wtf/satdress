@@ -95,6 +95,17 @@ func main() {
 		},
 	)
 
+	api := router.PathPrefix("/api/v1").Subrouter()
+	api.Use(authenticate)
+
+	// unauthenticated
+	api.HandleFunc("/claim", ClaimAddress).Methods("POST")
+
+	// authenticated routes; X-Pin in header or in json request body
+	api.HandleFunc("/users/{name}", GetUser).Methods("GET")
+	api.HandleFunc("/users/{name}", UpdateUser).Methods("PUT")
+	api.HandleFunc("/users/{name}", DeleteUser).Methods("DELETE")
+
 	srv := &http.Server{
 		Handler:      router,
 		Addr:         s.Host + ":" + s.Port,

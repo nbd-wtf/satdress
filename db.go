@@ -13,12 +13,15 @@ import (
 )
 
 type Params struct {
-	Name string
-	Kind string
-	Host string
-	Key  string
-	Pak  string
-	Waki string
+	Name        string `json:"name"`
+	Kind        string `json:"kind"`
+	Host        string `json:"host"`
+	Key         string `json:"key"`
+	Pak         string `json:"pak"`
+	Waki        string `json:"waki"`
+	Pin         string `json:"pin"`
+	MinSendable string `json:"minSendable"`
+	MaxSendable string `json:"maxSendable"`
 }
 
 func SaveName(
@@ -29,15 +32,16 @@ func SaveName(
 	name = strings.ToLower(name)
 	key := []byte(name)
 
-	mac := hmac.New(sha256.New, []byte(s.Secret))
-	mac.Write([]byte(name + "@" + s.Domain))
-	pin = hex.EncodeToString(mac.Sum(nil))
+	pin = ComputePIN(name)
 
 	if _, closer, err := db.Get(key); err == nil {
 		defer closer.Close()
 		if pin != providedPin {
-			return "", "", errors.New("name already exists! must provide pin.")
+			return "", "", errors.New("name already exists! must provide pin")
 		}
+	}
+	if err != nil {
+		return "", "", errors.New("that name does not exist")
 	}
 
 	params.Name = name
@@ -72,4 +76,22 @@ func GetName(name string) (*Params, error) {
 
 	params.Name = name
 	return &params, nil
+}
+
+func DeleteName(name string) error {
+	name = strings.ToLower(name)
+	key := []byte(name)
+
+	if err := db.Delete(key, pebble.Sync); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func ComputePIN(name string) string {
+	name = strings.ToLower(name)
+	mac := hmac.New(sha256.New, []byte(s.Secret))
+	mac.Write([]byte(name + "@" + s.Domain))
+	return hex.EncodeToString(mac.Sum(nil))
 }
