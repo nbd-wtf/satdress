@@ -48,6 +48,9 @@ func main() {
 		log.Fatal().Err(err).Msg("couldn't process envconfig.")
 	}
 
+	// increase default makeinvoice client timeout because people are using tor
+	makeinvoice.Client = &http.Client{Timeout: 25 * time.Second}
+
 	s.Domain = strings.ToLower(s.Domain)
 
 	if s.TorProxyURL != "" {
