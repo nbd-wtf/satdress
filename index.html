@@ -24,11 +24,15 @@
         <form action="/grab" method="post">
           <div class="field">
             <div class="row">
-              <label for="name"> Desired Username </label>
+              <label for="name"> {{usernameInfo}} </label>
             </div>
             <div class="domain-wrapper">
               <input class="input" name="name" id="name" />
-              <span class="suffix">@{{ domain }}</span>
+              <span class="suffix" v-if="domains.length == 1">@{{ domains[0] }}</span>
+              <span class="suffix-hack" v-if="domains.length > 1">@</span>
+              <select name="domain" id="domain" id="domain" v-if="domains.length > 1">
+                  <option v-for="domain in domains" :value="domain">{{ domain }}</option>
+              </select>
             </div>
           </div>
           <div class="field">

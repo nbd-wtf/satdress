@@ -12,10 +12,10 @@ import (
 
 func makeMetadata(params *Params) string {
 	metadata, _ := sjson.Set("[]", "0.0", "text/identifier")
-	metadata, _ = sjson.Set(metadata, "0.1", params.Name+"@"+s.Domain)
+	metadata, _ = sjson.Set(metadata, "0.1", params.Name+"@"+params.Domain)
 
 	metadata, _ = sjson.Set(metadata, "1.0", "text/plain")
-	metadata, _ = sjson.Set(metadata, "1.1", "Satoshis to "+params.Name+"@"+s.Domain+".")
+	metadata, _ = sjson.Set(metadata, "1.1", "Satoshis to "+params.Name+"@"+params.Domain+".")
 
 	// TODO support image, custom description
 

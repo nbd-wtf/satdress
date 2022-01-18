@@ -17,15 +17,19 @@ import (
 )
 
 type Settings struct {
-	Host          string `envconfig:"HOST" default:"0.0.0.0"`
-	Port          string `envconfig:"PORT" required:"true"`
-	Domain        string `envconfig:"DOMAIN" required:"true"`
+	Host   string `envconfig:"HOST" default:"0.0.0.0"`
+	Port   string `envconfig:"PORT" required:"true"`
+	Domain string `envconfig:"DOMAIN" required:"true"`
+	// GlobalUsers means that user@ part is globally unique across all domains
+	// WARNING: if you toggle this existing users won't work anymore for safety reasons!
+	GlobalUsers   bool   `envconfig:"GLOBAL_USERS" required:"false" default:false`
 	Secret        string `envconfig:"SECRET" required:"true"`
 	SiteOwnerName string `envconfig:"SITE_OWNER_NAME" required:"true"`
 	SiteOwnerURL  string `envconfig:"SITE_OWNER_URL" required:"true"`
 	SiteName      string `envconfig:"SITE_NAME" required:"true"`
 
-	TorProxyURL string `envconfig:"TOR_PROXY_URL"`
+	ForceMigrate bool   `envconfig:"FORCE_MIGRATE" required:"false" default:false`
+	TorProxyURL  string `envconfig:"TOR_PROXY_URL"`
 }
 
 var s Settings
@@ -57,12 +61,19 @@ func main() {
 		makeinvoice.TorProxyURL = s.TorProxyURL
 	}
 
-	db, err = pebble.Open(s.Domain, nil)
-	if err != nil {
-		log.Fatal().Err(err).Str("path", s.Domain).Msg("failed to open db.")
+	dbName := fmt.Sprintf("%v-multiple.db", s.SiteName)
+	if _, err := os.Stat(dbName); os.IsNotExist(err) || s.ForceMigrate {
+		for _, one := range getDomains(s.Domain) {
+			tryMigrate(one, dbName)
+		}
 	}
 
-	router.Path("/.well-known/lnurlp/{username}").Methods("GET").
+	db, err = pebble.Open(dbName, nil)
+	if err != nil {
+		log.Fatal().Err(err).Str("path", dbName).Msg("failed to open db.")
+	}
+
+	router.Path("/.well-known/lnurlp/{user}").Methods("GET").
 		HandlerFunc(handleLNURL)
 
 	router.Path("/").HandlerFunc(
@@ -76,8 +87,23 @@ func main() {
 	router.Path("/grab").HandlerFunc(
 		func(w http.ResponseWriter, r *http.Request) {
 			name := r.FormValue("name")
+			if name == "" || r.FormValue("kind") == "" {
+				sendError(w, 500, "internal error")
+				return
+			}
 
-			pin, inv, err := SaveName(name, &Params{
+			// might not get domain back
+			domain := r.FormValue("domain")
+			if domain == "" {
+				if !strings.Contains(s.Domain, ",") {
+					domain = s.Domain
+				} else {
+					sendError(w, 500, "internal error")
+					return
+				}
+			}
+
+			pin, inv, err := SaveName(name, domain, &Params{
 				Kind: r.FormValue("kind"),
 				Host: r.FormValue("host"),
 				Key:  r.FormValue("key"),
@@ -91,10 +117,11 @@ func main() {
 			}
 
 			renderHTML(w, grabHTML, struct {
-				PIN     string `json:"pin"`
-				Invoice string `json:"invoice"`
-				Name    string `json:"name"`
-			}{pin, inv, name})
+				PIN          string `json:"pin"`
+				Invoice      string `json:"invoice"`
+				Name         string `json:"name"`
+				ActualDomain string `json:"actual_domain"`
+			}{pin, inv, name, domain})
 		},
 	)
 
@@ -105,9 +132,9 @@ func main() {
 	api.HandleFunc("/claim", ClaimAddress).Methods("POST")
 
 	// authenticated routes; X-Pin in header or in json request body
-	api.HandleFunc("/users/{name}", GetUser).Methods("GET")
-	api.HandleFunc("/users/{name}", UpdateUser).Methods("PUT")
-	api.HandleFunc("/users/{name}", DeleteUser).Methods("DELETE")
+	api.HandleFunc("/users/{name}@{domain}", GetUser).Methods("GET")
+	api.HandleFunc("/users/{name}@{domain}", UpdateUser).Methods("PUT")
+	api.HandleFunc("/users/{name}@{domain}", DeleteUser).Methods("DELETE")
 
 	srv := &http.Server{
 		Handler:      router,
@@ -117,4 +144,11 @@ func main() {
 	}
 	log.Debug().Str("addr", srv.Addr).Msg("listening")
 	srv.ListenAndServe()
+}
+
+func getDomains(s string) []string {
+	splitFn := func(c rune) bool {
+		return c == ','
+	}
+	return strings.FieldsFunc(s, splitFn)
 }

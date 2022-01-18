@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"os"
 	"strings"
 
 	"github.com/cockroachdb/pebble"
@@ -14,6 +15,7 @@ import (
 
 type Params struct {
 	Name        string `json:"name"`
+	Domain      string `json:"domain,omitempty"`
 	Kind        string `json:"kind"`
 	Host        string `json:"host"`
 	Key         string `json:"key"`
@@ -26,13 +28,16 @@ type Params struct {
 
 func SaveName(
 	name string,
+	domain string,
 	params *Params,
 	providedPin string,
 ) (pin string, inv string, err error) {
 	name = strings.ToLower(name)
-	key := []byte(name)
+	domain = strings.ToLower(domain)
 
-	pin = ComputePIN(name)
+	key := []byte(getID(name, domain))
+
+	pin = ComputePIN(name, domain)
 
 	if _, closer, err := db.Get(key); err == nil {
 		defer closer.Close()
@@ -45,6 +50,7 @@ func SaveName(
 	}
 
 	params.Name = name
+	params.Domain = domain
 
 	// check if the given data works
 	if inv, err = makeInvoice(params, 1000, &pin); err != nil {
@@ -60,10 +66,8 @@ func SaveName(
 	return pin, inv, nil
 }
 
-func GetName(name string) (*Params, error) {
-	name = strings.ToLower(name)
-
-	val, closer, err := db.Get([]byte(name))
+func GetName(name, domain string) (*Params, error) {
+	val, closer, err := db.Get([]byte(getID(name, domain)))
 	if err != nil {
 		return nil, err
 	}
@@ -75,12 +79,12 @@ func GetName(name string) (*Params, error) {
 	}
 
 	params.Name = name
+	params.Domain = domain
 	return &params, nil
 }
 
-func DeleteName(name string) error {
-	name = strings.ToLower(name)
-	key := []byte(name)
+func DeleteName(name, domain string) error {
+	key := []byte(getID(name, domain))
 
 	if err := db.Delete(key, pebble.Sync); err != nil {
 		return err
@@ -89,9 +93,62 @@ func DeleteName(name string) error {
 	return nil
 }
 
-func ComputePIN(name string) string {
-	name = strings.ToLower(name)
+func ComputePIN(name, domain string) string {
 	mac := hmac.New(sha256.New, []byte(s.Secret))
-	mac.Write([]byte(name + "@" + s.Domain))
+	mac.Write([]byte(getID(name, domain)))
 	return hex.EncodeToString(mac.Sum(nil))
+}
+
+func getID(name, domain string) string {
+	if s.GlobalUsers {
+		return strings.ToLower(name)
+	} else {
+		return strings.ToLower(fmt.Sprintf("%s@%s", name, domain))
+	}
+}
+
+func tryMigrate(old, new string) {
+	if _, err := os.Stat(old); os.IsNotExist(err) {
+		return
+	}
+
+	log.Info().Str("db", old).Msg("Migrating db")
+
+	newDb, err := pebble.Open(new, nil)
+	if err != nil {
+		log.Fatal().Err(err).Str("path", new).Msg("failed to open db.")
+	}
+	defer newDb.Close()
+
+	oldDb, err := pebble.Open(old, nil)
+	if err != nil {
+		log.Fatal().Err(err).Str("path", old).Msg("failed to open db.")
+	}
+	defer oldDb.Close()
+
+	iter := oldDb.NewIter(nil)
+	defer iter.Close()
+
+	for iter.First(); iter.Valid(); iter.Next() {
+		log.Debug().Str("db", string(iter.Key())).Msg("Migrating key")
+		var params Params
+		if err := json.Unmarshal(iter.Value(), &params); err != nil {
+			log.Debug().Err(err).Msg("Unmarshal error")
+			continue
+		}
+
+		params.Domain = old // old database name was domain
+
+		// save it
+		data, err := json.Marshal(params)
+		if err != nil {
+			log.Debug().Err(err).Msg("Marshal error")
+			continue
+		}
+
+		if err := newDb.Set([]byte(getID(params.Name, params.Domain)), data, pebble.Sync); err != nil {
+			log.Debug().Err(err).Msg("Set error")
+			continue
+		}
+	}
 }

@@ -128,6 +128,19 @@ label {
   background-color: #f3f3f3;
 }
 
+select#domain {
+  width: 50%;
+  height: 35px;
+  outline: none;
+  padding: 0 10px;
+  font-size: 14px;
+  border-radius: 5px;
+  margin-bottom: 25px;
+  letter-spacing: 0.5px;
+  border: 1px solid #999;
+  background-color: #f3f3f3;
+}
+
 .input.full-width {
   width: calc(100% - 20px);
 }
@@ -135,6 +148,18 @@ label {
 .suffix {
   height: 35px;
   width: 50%;
+  padding: 0 10px;
+  margin-bottom: 25px;
+  display: inline-flex;
+  font-size: 16px;
+  font-weight: 600;
+  align-items: center;
+  word-break: keep-all;
+  letter-spacing: 0.5px;
+}
+
+.suffix-hack {
+  height: 35px;
   padding: 0 10px;
   margin-bottom: 25px;
   display: inline-flex;
@@ -259,5 +284,10 @@ select {
   .suffix {
     padding: 0;
     margin-bottom: 25px;
+  }
+
+  .suffix-hack {
+    padding: 0;
+    margin-bottom: 0px;
   }
 }
