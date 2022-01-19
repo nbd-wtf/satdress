@@ -5,6 +5,7 @@
     <meta charset="utf-8" />
     <link rel="icon" type="image/png" href="https://i.imgur.com/4yaPtA2.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=PT+Sans" />
     <link rel="stylesheet" href="/static/style.css" />
   </head>
   <body>
@@ -28,8 +29,8 @@
             </div>
             <div class="domain-wrapper">
               <input class="input" name="name" id="name" />
-              <span class="suffix" v-if="domains.length == 1">@{{ domains[0] }}</span>
-              <span class="suffix-hack" v-if="domains.length > 1">@</span>
+              <span v-if="domains.length == 1">@{{ domains[0] }}</span>
+              <span v-if="domains.length > 1">@</span>
               <select name="domain" id="domain" id="domain" v-if="domains.length > 1">
                   <option v-for="domain in domains" :value="domain">{{ domain }}</option>
               </select>
