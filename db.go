@@ -130,7 +130,7 @@ func tryMigrate(old, new string) {
 	defer iter.Close()
 
 	for iter.First(); iter.Valid(); iter.Next() {
-		log.Debug().Str("db", string(iter.Key())).Msg("Migrating key")
+		log.Debug().Str("key", string(iter.Key())).Msg("Migrating key")
 		var params Params
 		if err := json.Unmarshal(iter.Value(), &params); err != nil {
 			log.Debug().Err(err).Msg("Unmarshal error")
