@@ -1,3 +1,7 @@
+* {
+  box-sizing: border-box;
+}
+
 body {
   display: flex;
   align-items: center;
@@ -128,21 +132,34 @@ label {
   background-color: #f3f3f3;
 }
 
-.input.full-width {
-  width: calc(100% - 20px);
+input#name {
+  margin-right: 4px;
+  margin-bottom: 0;
 }
 
-.suffix {
-  height: 35px;
-  width: 50%;
+select#domain {
+  min-height: 100%;
+  margin-left: 4px;
+  margin-bottom: 0;
+  outline: none;
   padding: 0 10px;
-  margin-bottom: 25px;
-  display: inline-flex;
-  font-size: 16px;
-  font-weight: 600;
-  align-items: center;
-  word-break: keep-all;
+  font-size: 14px;
+  border-radius: 5px;
   letter-spacing: 0.5px;
+  border: 1px solid #999;
+  background-color: #f3f3f3;
+}
+
+.input.full-width {
+  width: 100%;
+}
+
+
+.domain-wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding-bottom: 20px;
 }
 
 select {
@@ -214,11 +231,6 @@ select {
   word-break: break-all;
 }
 
-.domain-wrapper {
-  display: flex;
-  flex-direction: row;
-}
-
 #qr {
   margin: 20px auto;
   display: block;
@@ -245,19 +257,29 @@ select {
   .domain-wrapper {
     display: flex;
     flex-direction: column;
+    align-items: center;
+  }
+
+  input#name {
+    margin: 0;
+    margin-bottom: 10px;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  select#domain {
+    margin: 0;
+    margin-top: 10px;
+    width: 100%;
+    max-width: 100%;
   }
 
   .input {
     margin-bottom: 5px;
-    width: calc(100% - 25px);
+    width: 100%;
   }
 
   .input.full-width {
-    margin-bottom: 25px;
-  }
-
-  .suffix {
-    padding: 0;
     margin-bottom: 25px;
   }
 }

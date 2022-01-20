@@ -8,18 +8,24 @@ import (
 )
 
 type BaseData struct {
-	Domain        string `json:"domain"`
-	SiteOwnerName string `json:"siteOwnerName"`
-	SiteOwnerURL  string `json:"siteOwnerURL"`
-	SiteName      string `json:"siteName"`
+	Domains       []string `json:"domains"`
+	SiteOwnerName string   `json:"siteOwnerName"`
+	SiteOwnerURL  string   `json:"siteOwnerURL"`
+	SiteName      string   `json:"siteName"`
+	UsernameInfo  string   `json:"usernameInfo"`
 }
 
 func renderHTML(w http.ResponseWriter, html string, extraData interface{}) {
+	info := "Desired Username"
+	if s.GlobalUsers {
+		info = "Desired Username (unique across all domains)"
+	}
 	base, _ := json.Marshal(BaseData{
-		Domain:        s.Domain,
+		Domains:       getDomains(s.Domain),
 		SiteOwnerName: s.SiteOwnerName,
 		SiteOwnerURL:  s.SiteOwnerURL,
 		SiteName:      s.SiteName,
+		UsernameInfo:  info,
 	})
 	extra, _ := json.Marshal(extraData)
 

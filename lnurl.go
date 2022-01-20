@@ -5,23 +5,47 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/fiatjaf/go-lnurl"
 	"github.com/gorilla/mux"
 )
 
 func handleLNURL(w http.ResponseWriter, r *http.Request) {
-	username := mux.Vars(r)["username"]
+	username := mux.Vars(r)["user"]
 
-	params, err := GetName(username)
+	domains := getDomains(s.Domain)
+	domain := ""
+
+	if len(domains) == 1 {
+		domain = domains[0]
+	} else {
+		hostname := r.URL.Host
+		if hostname == "" {
+			hostname = r.Host
+		}
+
+		for _, one := range getDomains(s.Domain) {
+			if strings.Contains(hostname, one) {
+				domain = one
+				break
+			}
+		}
+		if domain == "" {
+			json.NewEncoder(w).Encode(lnurl.ErrorResponse("incorrect domain"))
+			return
+		}
+	}
+
+	params, err := GetName(username, domain)
 	if err != nil {
-		log.Error().Err(err).Str("name", username).Msg("failed to get name")
+		log.Error().Err(err).Str("name", username).Str("domain", domain).Msg("failed to get name")
 		json.NewEncoder(w).Encode(lnurl.ErrorResponse(fmt.Sprintf(
-			"failed to get name %s", username)))
+			"failed to get name %s@%s", username, domain)))
 		return
 	}
 
-	log.Info().Str("username", username).Msg("got lnurl request")
+	log.Info().Str("username", username).Str("domain", domain).Msg("got lnurl request")
 
 	if amount := r.URL.Query().Get("amount"); amount == "" {
 		// check if the receiver accepts comments
@@ -41,7 +65,7 @@ func handleLNURL(w http.ResponseWriter, r *http.Request) {
 
 		json.NewEncoder(w).Encode(lnurl.LNURLPayResponse1{
 			LNURLResponse:   lnurl.LNURLResponse{Status: "OK"},
-			Callback:        fmt.Sprintf("https://%s/.well-known/lnurlp/%s", s.Domain, username),
+			Callback:        fmt.Sprintf("https://%s/.well-known/lnurlp/%s", domain, username),
 			MinSendable:     minSendable,
 			MaxSendable:     maxSendable,
 			EncodedMetadata: makeMetadata(params),

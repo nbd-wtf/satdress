@@ -12,10 +12,10 @@ import (
 
 func makeMetadata(params *Params) string {
 	metadata, _ := sjson.Set("[]", "0.0", "text/identifier")
-	metadata, _ = sjson.Set(metadata, "0.1", params.Name+"@"+s.Domain)
+	metadata, _ = sjson.Set(metadata, "0.1", params.Name+"@"+params.Domain)
 
 	metadata, _ = sjson.Set(metadata, "1.0", "text/plain")
-	metadata, _ = sjson.Set(metadata, "1.1", "Satoshis to "+params.Name+"@"+s.Domain+".")
+	metadata, _ = sjson.Set(metadata, "1.1", "Satoshis to "+params.Name+"@"+params.Domain+".")
 
 	// TODO support image, custom description
 
@@ -61,12 +61,12 @@ func makeInvoice(
 		Msatoshi: int64(msat),
 		Backend:  backend,
 
-		Label: s.Domain + "/" + strconv.FormatInt(time.Now().Unix(), 16),
+		Label: params.Domain + "/" + strconv.FormatInt(time.Now().Unix(), 16),
 	}
 
 	if pin != nil {
 		// use this as the description
-		mip.Description = fmt.Sprintf("%s's PIN for '%s@%s' lightning address: %s", s.Domain, params.Name, s.Domain, *pin)
+		mip.Description = fmt.Sprintf("%s's PIN for '%s@%s' lightning address: %s", params.Domain, params.Name, params.Domain, *pin)
 	} else {
 		// make the lnurlpay description_hash
 		h := sha256.Sum256([]byte(makeMetadata(params)))
