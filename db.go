@@ -14,13 +14,17 @@ import (
 )
 
 type Params struct {
-	Name        string `json:"name"`
-	Domain      string `json:"domain,omitempty"`
-	Kind        string `json:"kind"`
-	Host        string `json:"host"`
-	Key         string `json:"key"`
-	Pak         string `json:"pak"`
-	Waki        string `json:"waki"`
+	Name   string `json:"name"`
+	Domain string `json:"domain,omitempty"`
+	Kind   string `json:"kind"`
+
+	Host   string `json:"host"`
+	Key    string `json:"key"`
+	Pak    string `json:"pak"`
+	Waki   string `json:"waki"`
+	NodeId string `json:"nodeid"`
+	Rune   string `json:"rune"`
+
 	Pin         string `json:"pin"`
 	MinSendable string `json:"minSendable"`
 	MaxSendable string `json:"maxSendable"`

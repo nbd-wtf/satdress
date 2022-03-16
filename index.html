@@ -42,7 +42,8 @@
               <option disabled value="">Please select one:</option>
               <option value="lnd">LND</option>
               <option value="eclair">Eclair</option>
-              <option value="sparko">Sparko</option>
+              <option value="sparko">Sparko (c-lightning)</option>
+              <option value="commando">Commando (c-lightning)</option>
               <option value="lnpay">LNPay</option>
               <option value="lnbits">LNbits</option>
             </select>
@@ -121,6 +122,30 @@
               This is a new Lightning Address
               <input type="checkbox" v-model="isNew" />
             </label>
+          </div>
+          <div v-if="kind == 'commando'">
+            <div class="field">
+              <label for="nodeid">Node ID (pubkey)</label>
+              <input
+                class="input full-width"
+                name="nodeid"
+                id="nodeid"
+                placeholder="02c16cca44562b590dd279c942200bdccfd4f990c3a69fad620c10ef2f8228eaff"
+              />
+            </div>
+            <div class="field">
+              <label for="host">Node IP + Port</label>
+              <input
+                class="input full-width"
+                name="host"
+                id="host"
+                placeholder="10.147.17.32:9735"
+              />
+            </div>
+            <div class="field">
+              <label for="rune">Rune</label>
+              <input class="input full-width" name="rune" id="rune" />
+            </div>
           </div>
           <br />
           <div class="field" v-if="!isNew">

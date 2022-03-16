@@ -104,11 +104,13 @@ func main() {
 			}
 
 			pin, inv, err := SaveName(name, domain, &Params{
-				Kind: r.FormValue("kind"),
-				Host: r.FormValue("host"),
-				Key:  r.FormValue("key"),
-				Pak:  r.FormValue("pak"),
-				Waki: r.FormValue("waki"),
+				Kind:   r.FormValue("kind"),
+				Host:   r.FormValue("host"),
+				Key:    r.FormValue("key"),
+				Pak:    r.FormValue("pak"),
+				Waki:   r.FormValue("waki"),
+				NodeId: r.FormValue("nodeid"),
+				Rune:   r.FormValue("rune"),
 			}, r.FormValue("pin"))
 			if err != nil {
 				w.WriteHeader(500)

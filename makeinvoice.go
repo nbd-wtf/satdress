@@ -55,6 +55,12 @@ func makeInvoice(
 			Host:     params.Host,
 			Password: "",
 		}
+	case "commando":
+		backend = makeinvoice.CommandoParams{
+			Host:   params.Host,
+			NodeId: params.NodeId,
+			Rune:   params.Rune,
+		}
 	}
 
 	mip := makeinvoice.Params{
