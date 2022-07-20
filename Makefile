@@ -2,6 +2,6 @@ satdress: $(shell find . -name "*.go") $(shell find . -name "*.html") $(shell fi
 	CC=$$(which musl-gcc) go build -ldflags='-s -w -linkmode external -extldflags "-static"' -o ./satdress
 
 deploy: satdress
-	ssh root@turgot 'systemctl stop bitmia tinytip payaddress paymentlink'
+	ssh root@turgot 'systemctl stop payaddress'
 	scp satdress turgot:satdress/satdress
-	ssh root@turgot 'systemctl start bitmia tinytip payaddress paymentlink'
+	ssh root@turgot 'systemctl start payaddress'
