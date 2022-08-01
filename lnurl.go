@@ -60,7 +60,7 @@ func handleLNURL(w http.ResponseWriter, r *http.Request) {
 		}
 		maxSendable, err := strconv.ParseInt(params.MaxSendable, 10, 64)
 		if err != nil {
-			maxSendable = 100000000
+			maxSendable = 1000000000
 		}
 
 		json.NewEncoder(w).Encode(lnurl.LNURLPayResponse1{
