@@ -220,8 +220,8 @@ github.com/fiatjaf/lightningd-gjson-rpc v1.4.0 h1:Iv5tt4YuNoSMfR39wiV0tqnHYTJ85o
 github.com/fiatjaf/lightningd-gjson-rpc v1.4.0/go.mod h1:SQGA0qcY2qypaMXDQlE5V5+2MnLZzQ7NzfRsScliFeE=
 github.com/fiatjaf/ln-decodepay v1.0.0 h1:1YUMjvLock+BicMNwoZ/OA3oG2ZYEaJ8AzdS6EGVMTQ=
 github.com/fiatjaf/ln-decodepay v1.0.0/go.mod h1:/LWK+ZUa3i8MqbRjIMAiVQS2+NbhwKWlwib2n446cMQ=
-github.com/fiatjaf/makeinvoice v1.5.1 h1:mVkIjm7dcvkwgAVJeCbk12F1BDtedHNN4qDKPRQJoYc=
-github.com/fiatjaf/makeinvoice v1.5.1/go.mod h1:ifTgHnXswV6LE21YBXKNAMC5g0wox6m1t1tT+O3dQiw=
+github.com/fiatjaf/makeinvoice v1.5.2 h1:JctHY56k1yeZ+EX7xC/uDOJKpxyS+xe3jUXBFBpRJg4=
+github.com/fiatjaf/makeinvoice v1.5.2/go.mod h1:ifTgHnXswV6LE21YBXKNAMC5g0wox6m1t1tT+O3dQiw=
 github.com/flosch/pongo2 v0.0.0-20190707114632-bbf5a6c351f4/go.mod h1:T9YF2M40nIgbVgp3rreNmTged+9HrbNTIQf1PsaIiTA=
 github.com/form3tech-oss/jwt-go v3.2.3+incompatible h1:7ZaBxOI7TMoYBfyA3cQHErNNyAWIKUMIwqxEtgHOs5c=
 github.com/form3tech-oss/jwt-go v3.2.3+incompatible/go.mod h1:pbq4aXjuKjdthFRnoDwaVPLA+WlJuPGy+QneDUgJi2k=
