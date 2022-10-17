@@ -1,4 +1,4 @@
-module github.com/fiatjaf/satdress
+module github.com/nbd-wtf/satdress
 
 go 1.16
 
