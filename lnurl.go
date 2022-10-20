@@ -80,11 +80,25 @@ func handleLNURL(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
+		routing_msat := s.LnproxyRoutingBaseMsat + (s.LnproxyRoutingPpmMsat*msat)/1_000_000
+		if s.Lnproxy {
+			msat = msat - routing_msat
+		}
+
 		bolt11, err := makeInvoice(params, msat, nil)
 		if err != nil {
 			json.NewEncoder(w).Encode(
 				lnurl.ErrorResponse("failed to create invoice: " + err.Error()))
 			return
+		}
+
+		if s.Lnproxy {
+			bolt11, err = wrapInvoice(bolt11, msat, routing_msat)
+			if err != nil {
+				json.NewEncoder(w).Encode(
+					lnurl.ErrorResponse("failed to wrap invoice: " + err.Error()))
+				return
+			}
 		}
 
 		json.NewEncoder(w).Encode(lnurl.LNURLPayResponse2{
