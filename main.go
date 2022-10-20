@@ -30,6 +30,11 @@ type Settings struct {
 
 	ForceMigrate bool   `envconfig:"FORCE_MIGRATE" required:"false" default:false`
 	TorProxyURL  string `envconfig:"TOR_PROXY_URL"`
+
+	Lnproxy                bool   `envconfig:"LNPROXY" default:"false"`
+	LnproxyURL             string `envconfig:"LNPROXY_URL" default:"https://lnproxy.org/api"`
+	LnproxyRoutingBaseMsat int    `envconfig:"LNPROXY_ROUTING_BASE_MSAT" default:"1000"`
+	LnproxyRoutingPpmMsat  int    `envconfig:"LNPROXY_ROUTING_PPM" default:"6000"`
 }
 
 var s Settings
