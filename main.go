@@ -13,6 +13,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/kelseyhightower/envconfig"
 	_ "github.com/lib/pq"
+	"github.com/rs/cors"
 	"github.com/rs/zerolog"
 )
 
@@ -32,10 +33,12 @@ type Settings struct {
 	TorProxyURL  string `envconfig:"TOR_PROXY_URL"`
 }
 
-var s Settings
-var db *pebble.DB
-var router = mux.NewRouter()
-var log = zerolog.New(os.Stderr).Output(zerolog.ConsoleWriter{Out: os.Stderr})
+var (
+	s      Settings
+	db     *pebble.DB
+	router = mux.NewRouter()
+	log    = zerolog.New(os.Stderr).Output(zerolog.ConsoleWriter{Out: os.Stderr})
+)
 
 //go:embed index.html
 var indexHTML string
@@ -139,7 +142,7 @@ func main() {
 	api.HandleFunc("/users/{name}@{domain}", DeleteUser).Methods("DELETE")
 
 	srv := &http.Server{
-		Handler:      router,
+		Handler:      cors.Default().Handler(router),
 		Addr:         s.Host + ":" + s.Port,
 		WriteTimeout: 15 * time.Second,
 		ReadTimeout:  15 * time.Second,
