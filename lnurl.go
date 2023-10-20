@@ -63,7 +63,7 @@ func handleLNURL(w http.ResponseWriter, r *http.Request) {
 			maxSendable = 1000000000
 		}
 
-		json.NewEncoder(w).Encode(lnurl.LNURLPayResponse1{
+		json.NewEncoder(w).Encode(lnurl.LNURLPayParams{
 			LNURLResponse:   lnurl.LNURLResponse{Status: "OK"},
 			Callback:        fmt.Sprintf("https://%s/.well-known/lnurlp/%s", domain, username),
 			MinSendable:     minSendable,
@@ -87,10 +87,10 @@ func handleLNURL(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		json.NewEncoder(w).Encode(lnurl.LNURLPayResponse2{
+		json.NewEncoder(w).Encode(lnurl.LNURLPayValues{
 			LNURLResponse: lnurl.LNURLResponse{Status: "OK"},
 			PR:            bolt11,
-			Routes:        make([][]lnurl.RouteInfo, 0),
+			Routes:        make([]interface{}, 0),
 			Disposable:    lnurl.FALSE,
 			SuccessAction: lnurl.Action("Payment received!", ""),
 		})
