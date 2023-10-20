@@ -38,6 +38,7 @@ func makeInvoice(
 		backend = makeinvoice.LNDParams{
 			Host:     params.Host,
 			Macaroon: params.Key,
+			Private:  true,
 		}
 	case "lnbits":
 		backend = makeinvoice.LNBitsParams{
