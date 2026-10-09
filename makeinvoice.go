@@ -25,6 +25,7 @@ func makeInvoice(
 	params *Params,
 	msat int,
 	pin *string,
+	zapRequest string,
 ) (bolt11 string, err error) {
 	// prepare params
 	var backend makeinvoice.BackendParams
@@ -70,7 +71,11 @@ func makeInvoice(
 		Label: params.Domain + "/" + strconv.FormatInt(time.Now().Unix(), 16),
 	}
 
-	if pin != nil {
+	if zapRequest != "" {
+		// zap (NIP-57): the description_hash is the zap request's, as received
+		mip.Description = zapRequest
+		mip.UseDescriptionHash = true
+	} else if pin != nil {
 		// use this as the description
 		mip.Description = fmt.Sprintf("%s's PIN for '%s@%s' lightning address: %s", params.Domain, params.Name, params.Domain, *pin)
 	} else {
@@ -82,9 +87,10 @@ func makeInvoice(
 	// actually generate the invoice
 	bolt11, err = makeinvoice.MakeInvoice(mip)
 
+	// No backend in the log: it carries the owner's macaroon/key and the node address.
 	log.Debug().Int("msatoshi", msat).
-		Interface("backend", backend).
-		Str("bolt11", bolt11).Err(err).
+		Str("kind", params.Kind).
+		Bool("ok", err == nil).Err(err).
 		Msg("invoice generation")
 
 	return bolt11, err

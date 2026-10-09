@@ -11,6 +11,13 @@ import (
 	"github.com/gorilla/mux"
 )
 
+// payParams is the LNURL-pay response with the zap fields (NIP-57), which go-lnurl lacks.
+type payParams struct {
+	lnurl.LNURLPayParams
+	AllowsNostr bool   `json:"allowsNostr,omitempty"`
+	NostrPubkey string `json:"nostrPubkey,omitempty"`
+}
+
 func handleLNURL(w http.ResponseWriter, r *http.Request) {
 	username := mux.Vars(r)["user"]
 
@@ -63,7 +70,7 @@ func handleLNURL(w http.ResponseWriter, r *http.Request) {
 			maxSendable = 1000000000
 		}
 
-		json.NewEncoder(w).Encode(lnurl.LNURLPayParams{
+		response := payParams{LNURLPayParams: lnurl.LNURLPayParams{
 			LNURLResponse:   lnurl.LNURLResponse{Status: "OK"},
 			Callback:        fmt.Sprintf("https://%s/.well-known/lnurlp/%s", domain, username),
 			MinSendable:     minSendable,
@@ -71,7 +78,12 @@ func handleLNURL(w http.ResponseWriter, r *http.Request) {
 			EncodedMetadata: makeMetadata(params),
 			CommentAllowed:  commentLength,
 			Tag:             "payRequest",
-		})
+		}}
+		if zapsFor(params) {
+			response.AllowsNostr = true
+			response.NostrPubkey = nostrPubkey
+		}
+		json.NewEncoder(w).Encode(response)
 
 	} else {
 		msat, err := strconv.Atoi(amount)
@@ -80,7 +92,20 @@ func handleLNURL(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		bolt11, err := makeInvoice(params, msat, nil)
+		// Nostr zap: the request comes in "nostr"; if the owner cannot get zaps, it is a regular payment
+		var zapReq *NostrEvent
+		rawZap := r.URL.Query().Get("nostr")
+		if rawZap != "" && zapsFor(params) {
+			zapReq, err = parseZapRequest(rawZap, msat)
+			if err != nil {
+				json.NewEncoder(w).Encode(lnurl.ErrorResponse(err.Error()))
+				return
+			}
+		} else {
+			rawZap = ""
+		}
+
+		bolt11, err := makeInvoice(params, msat, nil, rawZap)
 		if err != nil {
 			json.NewEncoder(w).Encode(
 				lnurl.ErrorResponse("failed to create invoice: " + err.Error()))
@@ -95,9 +120,8 @@ func handleLNURL(w http.ResponseWriter, r *http.Request) {
 			SuccessAction: lnurl.Action("Payment received!", ""),
 		})
 
-		// send webhook
-		go func() {
-			// TODO
-		}()
+		if zapReq != nil {
+			watchZap(params, zapReq, rawZap, bolt11)
+		}
 	}
 }

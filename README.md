@@ -32,6 +32,29 @@ If you come from an old installation everything should get migrated in a seamles
 There is also a `GLOBAL_USERS` to make sure the user@ part is unique across all domains. But be warned that when enabling
 this option, existing users won't work anymore (which is by design).
 
+## Nostr zaps (NIP-57)
+
+Set `NOSTR_PRIVATE_KEY` (a 64-character hex secret key, used only to sign zap receipts) to enable
+[NIP-57](https://github.com/nostr-protocol/nips/blob/master/57.md) zaps:
+
+```
+NOSTR_PRIVATE_KEY=<64 hex characters, e.g. from `openssl rand -hex 32`>
+ZAP_RELAYS=wss://relay.damus.io,wss://nos.lol
+```
+
+- The lnurl-pay response then carries `allowsNostr` and `nostrPubkey` for addresses whose backend
+  satdress can ask about payments: **LND** (the invoice macaroon can look invoices up) and **LNbits**
+  (the invoice key). Other backends keep receiving regular payments.
+- A zap request (`nostr` parameter, kind 9734) is validated as NIP-57 says and its hash becomes the
+  invoice's `description_hash`.
+- satdress then polls the owner's node for that invoice (every 3 s for the first minute, then every
+  20 s, for up to an hour) and, once paid, publishes the signed receipt (kind 9735) to the relays in
+  the zap request plus the optional `ZAP_RELAYS`. `.onion` hosts go through `TOR_PROXY_URL`, as invoices do.
+- The server never touches the sats. Pending zaps are kept in memory, so restarting in the middle of
+  a zap loses that receipt (the payment itself still reaches the owner).
+
+Without `NOSTR_PRIVATE_KEY` nothing changes.
+
 ## Get help
 
 Maybe ask for help on https://t.me/lnurl if you're in trouble.

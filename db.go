@@ -57,7 +57,7 @@ func SaveName(
 	params.Domain = domain
 
 	// check if the given data works
-	if inv, err = makeInvoice(params, 1000, &pin); err != nil {
+	if inv, err = makeInvoice(params, 1000, &pin, ""); err != nil {
 		return "", "", fmt.Errorf("couldn't make an invoice with the given data: %w", err)
 	}
 
